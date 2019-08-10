@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1563597451731.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "30515A5D",
+    "lastKnownWriteTime" : 3419473787924512768,
+    "last_content_update" : 1563597451731,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "311E1F5",
+        "caption" : "frimodt_cases",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=frimodt_cases&cache_key=311E1F5",
+        "displayedObservations" : "21",
+        "environment" : "",
+        "object" : "frimodt_cases",
+        "preview" : "0",
+        "totalObservations" : "21",
+        "variables" : "10"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}
