@@ -31,11 +31,12 @@ haiti_array[:, 1] = normalise_to_upper_value(haiti_age_numbers, upper_point_of_p
 
 age_progression_graph = plt.figure()
 
-titles = ["Saskatchewan, native Canadians", "Chicago, hospital-delivered", "Chicago, household contact",
-          "Mumbai infants", "Chicago, housing project", "Agra", "Georgia schools", "Muscogee-Russell", "Haiti"]
-age_max = [1.0, 1.0, 1.0, 1.0, 10.0, 5.0]
-efficacies = [81, 70, 88, 37, 85, 60, "?", "", 89]
-followups = [15.0, 10.0, 7.0, 2.5, 6.0, 5.0, 3.0, "?", 3.0]
+titles = ["Saskatchewan", "Chicago, hospital", "Chicago, contact",
+          "Mumbai", "Chicago, housing project", "Agra", "Georgia schools", "Muscogee-Russell", "Haiti",
+          "English cities"]
+age_max = [1.0, 1.0, 1.0, 1.0, 10.0, 5.0, "", "", "", 1.5]
+efficacies = [81, 70, 88, 37, 85, 60, "?", "", 89, 78]
+followups = [15.0, 10.0, 7.0, 2.5, 6.0, 5.0, 3.0, "?", 3.0, 20.0]
 
 # create data structures for aronson age bracket arrays
 aronson_cohort_sizes = \
@@ -54,8 +55,8 @@ georgia_schools_array[:, 1] = georgia_schools_numbers
 
 age_patch_colour = "grey"
 
-for n_plot in range(9):
-    current_axis = age_progression_graph.add_subplot(3, 3, n_plot + 1, xlim=[0.0, 50.], yticks=[],
+for n_plot in range(10):
+    current_axis = age_progression_graph.add_subplot(3, 4, n_plot + 1, xlim=[0.0, 50.], yticks=[],
                                                      xticks=list(np.linspace(0.0, 50.0, 6)))
     current_axis.set_title(titles[n_plot], fontsize=8)
     if n_plot < 6:
@@ -66,9 +67,12 @@ for n_plot in range(9):
     elif n_plot == 8:
         average_age = \
             sum([age * prop / sum(haiti_age_numbers) for age, prop in zip(haiti_age_brackets, haiti_age_numbers)])
+    elif n_plot == 9:
+        average_age = 14.75
 
-    if n_plot < 6:
-        cohort = patches.Rectangle((0.0, 0.0), age_max[n_plot], upper_point_of_patch, color=age_patch_colour)
+    if n_plot < 6 or n_plot == 9:
+        age_min = 14.0 if n_plot == 9 else 0.0
+        cohort = patches.Rectangle((age_min, 0.0), age_max[n_plot], upper_point_of_patch, color=age_patch_colour)
     elif n_plot == 6:
         cohort = patches.Polygon(georgia_schools_array, color=age_patch_colour)
     elif n_plot == 7:
@@ -76,7 +80,7 @@ for n_plot in range(9):
     elif n_plot == 8:
         cohort = patches.Polygon(haiti_array, color=age_patch_colour)
 
-    if n_plot < 7 or n_plot == 8:
+    if n_plot < 7 or n_plot == 8 or n_plot == 9:
 
         # adding and subtracting 0.5 seems to be needed because arrows come out a bit smaller than they should
         followup = patches.FancyArrowPatch(
@@ -87,7 +91,7 @@ for n_plot in range(9):
     current_axis.add_patch(cohort)
     current_axis.text(25.0, 0.7, "%s%% efficacy" % efficacies[n_plot], fontsize=7)
 
-    if n_plot < 7 or n_plot == 8:
+    if n_plot < 7 or n_plot == 8 or n_plot == 9:
         current_axis.add_patch(followup)
         current_axis.axes.get_xaxis().set_ticklabels([])
 
