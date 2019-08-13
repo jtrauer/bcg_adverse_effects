@@ -36,7 +36,7 @@ titles = ["Saskatchewan", "Chicago, hospital", "Chicago, contact",
           "English cities"]
 age_max = [1.0, 1.0, 1.0, 1.0, 10.0, 5.0, "", "", "", 1.5]
 efficacies = [81, 70, 88, 37, 85, 60, "?", "", 89, 78]
-followups = [15.0, 10.0, 7.0, 2.5, 6.0, 5.0, 3.0, "?", 3.0, 20.0]
+followups = [15.0, 10.0, 7.0, 2.5, 6.0, 5.0, 3.0, 50.0, 3.0, 20.0]
 
 # create data structures for aronson age bracket arrays
 aronson_cohort_sizes = \
@@ -62,11 +62,12 @@ for n_plot in range(10):
     if n_plot < 6:
         average_age = age_max[n_plot] / 2.0
     elif n_plot == 6:
-        average_age = sum([age * prop / sum(georgia_schools_numbers) for
-                           age, prop in zip(georgia_schools_brackets, georgia_schools_numbers)])
+        average_age = 12.0
+    elif n_plot == 7:
+        average_age = sum([age * weight / sum(aronson_cohort_sizes)
+                           for age, weight in zip(aronson_array[:, 0], aronson_cohort_sizes)])
     elif n_plot == 8:
-        average_age = \
-            sum([age * prop / sum(haiti_age_numbers) for age, prop in zip(haiti_age_brackets, haiti_age_numbers)])
+        average_age = 9.0
     elif n_plot == 9:
         average_age = 14.75
 
@@ -80,20 +81,18 @@ for n_plot in range(10):
     elif n_plot == 8:
         cohort = patches.Polygon(haiti_array, color=age_patch_colour)
 
-    if n_plot < 7 or n_plot == 8 or n_plot == 9:
-
-        # adding and subtracting 0.5 seems to be needed because arrows come out a bit smaller than they should
-        followup = patches.FancyArrowPatch(
-            (average_age - 0.5, upper_point_of_patch / 2.0),
-            (followups[n_plot] + average_age + 0.5, upper_point_of_patch / 2.0),
-            mutation_scale=16, edgecolor="darkred", facecolor="darkred")
+    # adding and subtracting 0.5 seems to be needed because arrows come out a bit smaller than they should
+    followup = patches.FancyArrowPatch(
+        (average_age - 0.5, upper_point_of_patch / 2.0),
+        (followups[n_plot] + average_age + 0.5, upper_point_of_patch / 2.0),
+        mutation_scale=10, edgecolor="darkred", facecolor="darkred")
 
     current_axis.add_patch(cohort)
     current_axis.text(25.0, 0.7, "%s%% efficacy" % efficacies[n_plot], fontsize=7)
 
-    if n_plot < 7 or n_plot == 8 or n_plot == 9:
-        current_axis.add_patch(followup)
-        current_axis.axes.get_xaxis().set_ticklabels([])
+    # if n_plot < 7 or n_plot == 8 or n_plot == 9:
+    current_axis.add_patch(followup)
+    current_axis.axes.get_xaxis().set_ticklabels([])
 
 age_progression_graph.savefig("age_progression.png")
 
