@@ -105,7 +105,7 @@ ferguson_axis.scatter(ferguson_times, ferguson_times, s=[marker_enlargement * i 
                       color=unvaccinated_colour, alpha=0.5)
 
 # rosenthal plot
-rosenthal_axis = reactivation_graph.add_subplot(224, title="Chicago", xlim=(0, x_limit), ylim=(0, y_limit),
+rosenthal_axis = reactivation_graph.add_subplot(224, title="Chicago, hospital", xlim=(0, x_limit), ylim=(0, y_limit),
                                                 xlabel="Time from vaccination")
 rosenthal_axis.scatter(rosenthal_times, rosenthal_times, s=[marker_enlargement * i for i in rosenthal_vaccinated],
                        color=vaccinated_colour, alpha=0.5)
