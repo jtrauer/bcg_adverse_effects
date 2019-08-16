@@ -33,10 +33,10 @@ age_progression_graph = plt.figure()
 
 titles = ["Saskatchewan", "Chicago, hospital", "Chicago, contact",
           "Mumbai", "Chicago, housing project", "Agra", "Georgia schools", "Muscogee-Russell", "Haiti",
-          "English cities", "Puerto Rico"]
+          "English cities", "Puerto Rico", "Chengalpattu"]
 age_max = [1.0, 1.0, 1.0, 1.0, 10.0, 5.0, "", "", "", 1.5]
-efficacies = [81, 70, 88, 37, 85, 60, "?", "", 89, 78, 31]
-followups = [15.0, 10.0, 7.0, 2.5, 6.0, 5.0, 3.0, 50.0, 3.0, 20.0, 1e4]
+efficacies = [81, 70, 88, 37, 85, 60, -25, 8, 89, 78, 31, -5]
+followups = [15.0, 10.0, 7.0, 2.5, 6.0, 5.0, 3.0, 50.0, 3.0, 20.0, 6.3, 15.0]
 
 # create data structures for aronson age bracket arrays
 aronson_cohort_sizes = \
@@ -54,19 +54,35 @@ georgia_schools_array[:, 0] = georgia_schools_brackets
 georgia_schools_array[:, 1] = georgia_schools_numbers
 
 # puerto rico
-puerto_rico_age_numbers = duplicate_list_values(normalise_to_upper_value([0.0,
-    2.5850363644096674, 3.020930801292959, 3.500606073494385, 3.5854563627084026, 3.3195814903028236,
-    5.158934799251448, 5.858072473630486, 9.758873128615175, 11.15962061925825, 11.288331490302822,
-    10.934655707723714, 9.74762887036407, 8.16593654304185, 7.22046189179993, 5.4413171997278,
-    3.706152709254848, 2.453494492174208, 1.749053674719292], upper_point_of_patch)) + [0.0]
+puerto_rico_age_numbers = \
+    [0.0, 2.5850363644096674, 3.020930801292959, 3.500606073494385, 3.5854563627084026, 3.3195814903028236,
+     5.158934799251448, 5.858072473630486, 9.758873128615175, 11.15962061925825, 11.288331490302822,
+     10.934655707723714, 9.74762887036407, 8.16593654304185, 7.22046189179993, 5.4413171997278,
+     3.706152709254848, 2.453494492174208, 1.749053674719292]
 puerto_rico_age_brackets = [0] + duplicate_list_values(list(range(1, 20)))
 puerto_rico_array = np.zeros((len(puerto_rico_age_brackets), 2))
 puerto_rico_array[:, 0] = puerto_rico_age_brackets
-puerto_rico_array[:, 1] = puerto_rico_age_numbers
+puerto_rico_array[:, 1] = duplicate_list_values(
+    normalise_to_upper_value(puerto_rico_age_numbers, upper_point_of_patch)) + [0.0]
+puerto_rico_average = sum([i * j / sum(puerto_rico_age_numbers) for i, j in zip(puerto_rico_age_numbers, range(19))])
+
+# chengalpattu
+chengalpattu_male_numbers = [16199, 38369, 21289, 19519, 15700, 12238, 7739, 3959]
+chengalpattu_female_numbers = [16136, 36093, 19988, 20259, 16336, 12088, 6749, 2511]
+chengalpattu_male_tstpos_props = [4.9, 23.5, 62.0, 81.8, 85.2, 85.5, 82.6, 79.9]
+chengalpattu_female_tstpos_props = [5.3, 21.3, 48.4, 64.0, 71.6, 73.7, 72.4, 72.8]
+chengalpattu_numbers \
+    = normalise_to_upper_value([males * (1.0 - male_props / 1e2) + females * (1.0 - female_props / 1e2)
+       for males, females, male_props, female_props in
+       zip(chengalpattu_male_numbers, chengalpattu_female_numbers,
+           chengalpattu_male_tstpos_props, chengalpattu_female_tstpos_props)], upper_point_of_patch)
+chengalpattu_array = np.zeros((len(chengalpattu_numbers) * 2, 2))
+chengalpattu_array[:, 0] = [0] + duplicate_list_values(list(range(5, 75, 10))) + [0]
+chengalpattu_array[:, 1] = duplicate_list_values(chengalpattu_numbers)
 
 age_patch_colour = "grey"
 
-for n_plot in range(11):
+for n_plot in range(12):
     current_axis = age_progression_graph.add_subplot(3, 4, n_plot + 1, xlim=[0.0, 50.], yticks=[],
                                                      xticks=list(np.linspace(0.0, 50.0, 6)))
     current_axis.set_title(titles[n_plot], fontsize=8)
@@ -82,7 +98,7 @@ for n_plot in range(11):
     elif n_plot == 9:
         average_age = 14.75
     elif n_plot == 10:
-        average_age = 1e4
+        average_age = puerto_rico_average
 
     if n_plot < 6 or n_plot == 9:
         age_min = 14.0 if n_plot == 9 else 0.0
@@ -95,6 +111,8 @@ for n_plot in range(11):
         cohort = patches.Polygon(haiti_array, color=age_patch_colour)
     elif n_plot == 10:
         cohort = patches.Polygon(puerto_rico_array, color=age_patch_colour)
+    elif n_plot == 11:
+        cohort = patches.Polygon(chengalpattu_array, color=age_patch_colour)
 
     # adding and subtracting 0.5 seems to be needed because arrows come out a bit smaller than they should
     followup = patches.FancyArrowPatch(
