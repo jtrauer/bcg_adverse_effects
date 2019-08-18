@@ -12,7 +12,7 @@ def duplicate_list_values(list_to_duplicate):
     return [element for element in list_to_duplicate for _ in (0, 1)]
 
 
-upper_point_of_patch = 0.9
+upper_point_of_patch = 0.95
 
 # getting haiti data, obtained through webplotdigitiser
 haiti_age_brackets = [0.0, 2.5, 7.5, 12.5, 17.5, 22.5, 30.0, 75.0]
@@ -32,13 +32,13 @@ haiti_array[:, 1] = normalise_to_upper_value(haiti_age_numbers, upper_point_of_p
 age_progression_graph = plt.figure()
 
 titles = ["Saskatchewan", "Chicago, hospital", "Chicago, contact",
-          "Mumbai", "Chicago, housing project", "Agra", "Georgia schools", "Muscogee-Russell", "Haiti",
+          "Mumbai", "Chicago, housing project", "Agra", "Georgia schools", "Native Americans", "Haiti",
           "English cities", "Puerto Rico", "Chengalpattu"]
 age_max = [1.0, 1.0, 1.0, 1.0, 10.0, 5.0, "", "", "", 1.5]
 efficacies = [81, 70, 88, 37, 85, 60, -25, 8, 89, 78, 31, -5]
 followups = [15.0, 10.0, 7.0, 2.5, 6.0, 5.0, 3.0, 50.0, 3.0, 20.0, 6.3, 15.0]
 
-# create data structures for aronson age bracket arrays
+# create data structures for aronson age bracket arrays (from aronson 1948)
 aronson_cohort_sizes = \
     [0] + duplicate_list_values(normalise_to_upper_value([433 + 413, 659 + 624, 387 + 351, 72 + 69],
                                                          upper_point_of_patch)) + [0]
@@ -81,9 +81,10 @@ chengalpattu_array[:, 0] = [0] + duplicate_list_values(list(range(5, 75, 10))) +
 chengalpattu_array[:, 1] = duplicate_list_values(chengalpattu_numbers)
 
 age_patch_colour = "grey"
+age_edge_colour = "black"
 
 for n_plot in range(12):
-    current_axis = age_progression_graph.add_subplot(3, 4, n_plot + 1, xlim=[0.0, 50.], yticks=[],
+    current_axis = age_progression_graph.add_subplot(3, 4, n_plot + 1, xlim=[-0.8, 50.], yticks=[],
                                                      xticks=list(np.linspace(0.0, 50.0, 6)))
     current_axis.set_title(titles[n_plot], fontsize=8)
     if n_plot < 6:
@@ -102,23 +103,24 @@ for n_plot in range(12):
 
     if n_plot < 6 or n_plot == 9:
         age_min = 14.0 if n_plot == 9 else 0.0
-        cohort = patches.Rectangle((age_min, 0.0), age_max[n_plot], upper_point_of_patch, color=age_patch_colour)
+        cohort = patches.Rectangle((age_min, 0.0), age_max[n_plot], upper_point_of_patch, facecolor=age_patch_colour,
+                                   edgecolor=age_edge_colour)
     elif n_plot == 6:
-        cohort = patches.Polygon(georgia_schools_array, color=age_patch_colour)
+        cohort = patches.Polygon(georgia_schools_array, facecolor=age_patch_colour, edgecolor=age_edge_colour)
     elif n_plot == 7:
-        cohort = patches.Polygon(aronson_array, color=age_patch_colour)
+        cohort = patches.Polygon(aronson_array, facecolor=age_patch_colour, edgecolor=age_edge_colour)
     elif n_plot == 8:
-        cohort = patches.Polygon(haiti_array, color=age_patch_colour)
+        cohort = patches.Polygon(haiti_array, facecolor=age_patch_colour, edgecolor=age_edge_colour)
     elif n_plot == 10:
-        cohort = patches.Polygon(puerto_rico_array, color=age_patch_colour)
+        cohort = patches.Polygon(puerto_rico_array, facecolor=age_patch_colour, edgecolor=age_edge_colour)
     elif n_plot == 11:
-        cohort = patches.Polygon(chengalpattu_array, color=age_patch_colour)
+        cohort = patches.Polygon(chengalpattu_array, facecolor=age_patch_colour, edgecolor=age_edge_colour)
 
     # adding and subtracting 0.5 seems to be needed because arrows come out a bit smaller than they should
     followup = patches.FancyArrowPatch(
         (average_age - 0.5, upper_point_of_patch / 2.0),
         (followups[n_plot] + average_age + 0.5, upper_point_of_patch / 2.0),
-        mutation_scale=10, edgecolor="darkred", facecolor="darkred")
+        mutation_scale=10, edgecolor="black", facecolor="darkred")
 
     current_axis.add_patch(cohort)
     current_axis.text(25.0, 0.7, "%s%% efficacy" % efficacies[n_plot], fontsize=7)
