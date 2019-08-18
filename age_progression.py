@@ -85,7 +85,7 @@ madanapalle_vaccinated_numbers = [1812, 1791, 645, 415, 366]
 madanapalle_unvaccinated_numbers = [2079, 1972, 678, 513, 566]
 madanapalle_numbers = normalise_to_upper_value(
     [i + j for i, j in zip(madanapalle_vaccinated_numbers, madanapalle_unvaccinated_numbers)], upper_point_of_patch)
-madanapalle_ages = duplicate_list_values([0] + list(range(5, 45, 10)) + [50])
+madanapalle_ages = duplicate_list_values([0] + list(range(5, 55, 10)))
 madanapalle_array = np.zeros((len(madanapalle_ages), 2))
 madanapalle_array[:, 0] = madanapalle_ages
 madanapalle_array[:, 1] = [0] + duplicate_list_values(madanapalle_numbers) + [0]
