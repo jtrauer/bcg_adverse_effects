@@ -33,10 +33,10 @@ age_progression_graph = plt.figure()
 
 titles = ["Saskatchewan", "Chicago, hospital", "Chicago, contact",
           "Mumbai", "Chicago, housing project", "Agra", "Georgia schools", "Native Americans", "Haiti",
-          "English cities", "Puerto Rico", "Chengalpattu"]
-age_max = [1.0, 1.0, 1.0, 1.0, 10.0, 5.0, "", "", "", 1.5]
-efficacies = [81, 70, 88, 37, 85, 60, -25, 8, 89, 78, 31, -5]
-followups = [15.0, 10.0, 7.0, 2.5, 6.0, 5.0, 3.0, 50.0, 3.0, 20.0, 6.3, 15.0]
+          "English cities", "Puerto Rico", "Chengalpattu", "Madanapalle"]
+age_max = [1.0, 1.0, 1.0, 1.0, 10.0, 5.0, "", "", "", 1.5, ""]
+efficacies = [81, 70, 88, 37, 85, 60, -25, 8, 89, 78, 31, -5, ""]
+followups = [15.0, 10.0, 7.0, 2.5, 6.0, 5.0, 3.0, 50.0, 3.0, 20.0, 6.3, 15.0, 21.0]
 
 # create data structures for aronson age bracket arrays (from aronson 1948)
 aronson_cohort_sizes = \
@@ -80,11 +80,21 @@ chengalpattu_array = np.zeros((len(chengalpattu_numbers) * 2, 2))
 chengalpattu_array[:, 0] = [0] + duplicate_list_values(list(range(5, 75, 10))) + [0]
 chengalpattu_array[:, 1] = duplicate_list_values(chengalpattu_numbers)
 
+# madanapalle
+madanapalle_vaccinated_numbers = [1812, 1791, 645, 415, 366]
+madanapalle_unvaccinated_numbers = [2079, 1972, 678, 513, 566]
+madanapalle_numbers = normalise_to_upper_value(
+    [i + j for i, j in zip(madanapalle_vaccinated_numbers, madanapalle_unvaccinated_numbers)], upper_point_of_patch)
+madanapalle_ages = duplicate_list_values([0] + list(range(5, 45, 10)) + [50])
+madanapalle_array = np.zeros((len(madanapalle_ages), 2))
+madanapalle_array[:, 0] = madanapalle_ages
+madanapalle_array[:, 1] = [0] + duplicate_list_values(madanapalle_numbers) + [0]
+
 age_patch_colour = "grey"
 age_edge_colour = "black"
 
-for n_plot in range(12):
-    current_axis = age_progression_graph.add_subplot(3, 4, n_plot + 1, xlim=[-0.8, 50.], yticks=[],
+for n_plot in range(13):
+    current_axis = age_progression_graph.add_subplot(3, 5, n_plot + 1, xlim=[-0.8, 50.], yticks=[],
                                                      xticks=list(np.linspace(0.0, 50.0, 6)))
     current_axis.set_title(titles[n_plot], fontsize=8)
     if n_plot < 6:
@@ -115,6 +125,8 @@ for n_plot in range(12):
         cohort = patches.Polygon(puerto_rico_array, facecolor=age_patch_colour, edgecolor=age_edge_colour)
     elif n_plot == 11:
         cohort = patches.Polygon(chengalpattu_array, facecolor=age_patch_colour, edgecolor=age_edge_colour)
+    elif n_plot == 12:
+        cohort = patches.Polygon(madanapalle_array, facecolor=age_patch_colour, edgecolor=age_edge_colour)
 
     # adding and subtracting 0.5 seems to be needed because arrows come out a bit smaller than they should
     followup = patches.FancyArrowPatch(
