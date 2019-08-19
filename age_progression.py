@@ -35,10 +35,10 @@ age_progression_graph = plt.figure()
 
 titles = ["Saskatchewan", "Chicago, hospital", "Chicago, contact",
           "Mumbai", "Chicago, housing project", "Agra", "Georgia schools", "Native Americans", "Haiti",
-          "English cities", "Puerto Rico", "Chengalpattu", "Madanapalle", "Rand Mines"]
-age_max = [1.0, 1.0, 1.0, 1.0, 10.0, 5.0, "", "", "", 1.5, "", ""]
-efficacies = [81, 70, 88, 37, 85, 60, -25, 8, 89, 78, 31, -5, "", ""]
-followups = [15.0, 10.0, 7.0, 2.5, 6.0, 5.0, 3.0, 50.0, 3.0, 20.0, 6.3, 15.0, 21.0, 3.6]
+          "English cities", "Puerto Rico", "Chengalpattu", "Madanapalle", "Rand Mines", "Muscogee-Russell"]
+age_max = [1.0, 1.0, 1.0, 1.0, 10.0, 5.0, "", "", "", 1.5, "", "", ""]
+efficacies = [81, 70, 88, 37, 85, 60, -25, 8, 89, 78, 31, -5, "", "", ""]
+followups = [15.0, 10.0, 7.0, 2.5, 6.0, 5.0, 3.0, 50.0, 3.0, 20.0, 6.3, 15.0, 21.0, 3.6, 7.0]
 
 # create data structures for aronson age bracket arrays (from aronson 1948)
 aronson_cohort_sizes = \
@@ -98,10 +98,23 @@ rand_array = np.zeros((len(rand_ages), 2))
 rand_array[:, 0] = rand_ages
 rand_array[:, 1] = rand_values = normalise_to_upper_value(norm.pdf(rand_ages, 30.3, 10.3), upper_point_of_patch)
 
+# muscogee-russell trial
+muscogee_russell_age_numbers = [0.0] + duplicate_list_values(
+    [0.2468241835849856, 9.354591859539967, 7.280231716147719, 3.7621154826078804, 2.8368957903111927,
+     2.751361064177864, 2.3271202653292953, 1.8439849456021342, 1.3459740213300453, 0.965930932138999,
+     0.4088824523292338, 0.3381518134112902, 0.10529138841956076, 0.1377244973672731]) + [0.0]
+muscogee_russell_age_brackets = duplicate_list_values(np.linspace(0.0, 70.0, 15))
+muscogee_russell_array = np.zeros((len(muscogee_russell_age_numbers), 2))
+muscogee_russell_array[:, 0] = muscogee_russell_age_brackets
+muscogee_russell_array[:, 1] = normalise_to_upper_value(muscogee_russell_age_numbers, upper_point_of_patch)
+muscogee_russell_average = \
+    sum([i * j / sum(muscogee_russell_age_numbers) for
+         i, j in zip(muscogee_russell_age_numbers, muscogee_russell_age_brackets)])
+
 age_patch_colour = "grey"
 age_edge_colour = "black"
 
-for n_plot in range(14):
+for n_plot in range(15):
     current_axis = age_progression_graph.add_subplot(3, 5, n_plot + 1, xlim=[-0.8, x_upper_lim], yticks=[],
                                                      xticks=list(np.linspace(0.0, 50.0, 6)))
     current_axis.set_title(titles[n_plot], fontsize=8)
@@ -120,6 +133,8 @@ for n_plot in range(14):
         average_age = puerto_rico_average
     elif n_plot == 13:
         average_age = 30.3
+    elif n_plot == 14:
+        average_age = muscogee_russell_average
 
     if n_plot < 6 or n_plot == 9:
         age_min = 14.0 if n_plot == 9 else 0.0
@@ -139,6 +154,8 @@ for n_plot in range(14):
         cohort = patches.Polygon(madanapalle_array, facecolor=age_patch_colour, edgecolor=age_edge_colour)
     elif n_plot == 13:
         cohort = patches.Polygon(rand_array, facecolor=age_patch_colour, edgecolor=age_edge_colour)
+    elif n_plot == 14:
+        cohort = patches.Polygon(muscogee_russell_array, facecolor=age_patch_colour, edgecolor=age_edge_colour)
 
     # adding and subtracting 0.5 seems to be needed because arrows come out a bit smaller than they should
     followup = patches.FancyArrowPatch(
