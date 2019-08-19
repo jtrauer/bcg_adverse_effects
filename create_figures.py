@@ -75,7 +75,7 @@ chicago_nursing_assumed_age = 18.0
 english_cities_vaccinated = [14, 13, 13, 9, 2, 5, 3, 3]
 english_cities_unvaccinated = [68, 92, 41, 26, 11, 5, 2, 3]
 english_cities_times = np.linspace(1.25, 18.75, 8)
-english_cities_assumed_age = 14.75
+english_cities_assumed_age = 14.7 + 1.25
 
 # plotting
 plt.style.use("ggplot")
@@ -138,7 +138,7 @@ english_cities_axis = reactivation_graph.add_subplot(236, title="English cities"
 english_cities_axis.scatter(english_cities_times, [i + english_cities_assumed_age for i in english_cities_times],
                             color=vaccinated_colour, alpha=0.5,
                             s=[marker_enlargement * i for i in english_cities_vaccinated])
-english_cities_axis.scatter(english_cities_times, [i + 14.75 for i in english_cities_times],
+english_cities_axis.scatter(english_cities_times, [i + english_cities_assumed_age for i in english_cities_times],
                             color=unvaccinated_colour, alpha=0.5,
                             s=[marker_enlargement * i for i in english_cities_unvaccinated])
 
