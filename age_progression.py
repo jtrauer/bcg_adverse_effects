@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import numpy as np
+from scipy.stats import norm
 plt.style.use("ggplot")
 
 
@@ -13,6 +14,7 @@ def duplicate_list_values(list_to_duplicate):
 
 
 upper_point_of_patch = 0.95
+x_upper_lim = 50.0
 
 # getting haiti data, obtained through webplotdigitiser
 haiti_age_brackets = [0.0, 2.5, 7.5, 12.5, 17.5, 22.5, 30.0, 75.0]
@@ -33,10 +35,10 @@ age_progression_graph = plt.figure()
 
 titles = ["Saskatchewan", "Chicago, hospital", "Chicago, contact",
           "Mumbai", "Chicago, housing project", "Agra", "Georgia schools", "Native Americans", "Haiti",
-          "English cities", "Puerto Rico", "Chengalpattu", "Madanapalle"]
-age_max = [1.0, 1.0, 1.0, 1.0, 10.0, 5.0, "", "", "", 1.5, ""]
-efficacies = [81, 70, 88, 37, 85, 60, -25, 8, 89, 78, 31, -5, ""]
-followups = [15.0, 10.0, 7.0, 2.5, 6.0, 5.0, 3.0, 50.0, 3.0, 20.0, 6.3, 15.0, 21.0]
+          "English cities", "Puerto Rico", "Chengalpattu", "Madanapalle", "Rand Mines"]
+age_max = [1.0, 1.0, 1.0, 1.0, 10.0, 5.0, "", "", "", 1.5, "", ""]
+efficacies = [81, 70, 88, 37, 85, 60, -25, 8, 89, 78, 31, -5, "", ""]
+followups = [15.0, 10.0, 7.0, 2.5, 6.0, 5.0, 3.0, 50.0, 3.0, 20.0, 6.3, 15.0, 21.0, 3.6]
 
 # create data structures for aronson age bracket arrays (from aronson 1948)
 aronson_cohort_sizes = \
@@ -90,11 +92,17 @@ madanapalle_array = np.zeros((len(madanapalle_ages), 2))
 madanapalle_array[:, 0] = madanapalle_ages
 madanapalle_array[:, 1] = [0] + duplicate_list_values(madanapalle_numbers) + [0]
 
+# rand mines
+rand_ages = np.linspace(0.0, 100.0, 1e2)
+rand_array = np.zeros((len(rand_ages), 2))
+rand_array[:, 0] = rand_ages
+rand_array[:, 1] = rand_values = normalise_to_upper_value(norm.pdf(rand_ages, 30.3, 10.3), upper_point_of_patch)
+
 age_patch_colour = "grey"
 age_edge_colour = "black"
 
-for n_plot in range(13):
-    current_axis = age_progression_graph.add_subplot(3, 5, n_plot + 1, xlim=[-0.8, 50.], yticks=[],
+for n_plot in range(14):
+    current_axis = age_progression_graph.add_subplot(3, 5, n_plot + 1, xlim=[-0.8, x_upper_lim], yticks=[],
                                                      xticks=list(np.linspace(0.0, 50.0, 6)))
     current_axis.set_title(titles[n_plot], fontsize=8)
     if n_plot < 6:
@@ -110,6 +118,8 @@ for n_plot in range(13):
         average_age = 14.75
     elif n_plot == 10:
         average_age = puerto_rico_average
+    elif n_plot == 13:
+        average_age = 30.3
 
     if n_plot < 6 or n_plot == 9:
         age_min = 14.0 if n_plot == 9 else 0.0
@@ -127,6 +137,8 @@ for n_plot in range(13):
         cohort = patches.Polygon(chengalpattu_array, facecolor=age_patch_colour, edgecolor=age_edge_colour)
     elif n_plot == 12:
         cohort = patches.Polygon(madanapalle_array, facecolor=age_patch_colour, edgecolor=age_edge_colour)
+    elif n_plot == 13:
+        cohort = patches.Polygon(rand_array, facecolor=age_patch_colour, edgecolor=age_edge_colour)
 
     # adding and subtracting 0.5 seems to be needed because arrows come out a bit smaller than they should
     followup = patches.FancyArrowPatch(
@@ -135,7 +147,7 @@ for n_plot in range(13):
         mutation_scale=10, edgecolor="black", facecolor="darkred")
 
     current_axis.add_patch(cohort)
-    current_axis.text(25.0, 0.7, "%s%% efficacy" % efficacies[n_plot], fontsize=7)
+    # current_axis.text(25.0, 0.7, "%s%% efficacy" % efficacies[n_plot], fontsize=7)
 
     # if n_plot < 7 or n_plot == 8 or n_plot == 9:
     current_axis.add_patch(followup)
