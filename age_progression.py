@@ -16,6 +16,9 @@ def duplicate_list_values(list_to_duplicate):
 preparation
 """
 
+titles = ["saskatchewan", "chicago, hospital", "chicago, contact",
+          "mumbai", "chicago, housing project", "agra", "georgia_schools", "aronson", "haiti",
+          "english cities", "puerto_rico", "chengalpattu", "madanapalle", "rand", "muscogee-russell"]
 upper_point_of_patch, x_upper_lim = 0.95, 50.0
 data_arrays = {}
 age_progression_graph = plt.figure()
@@ -32,23 +35,16 @@ data collation
 
 # getting haiti data, obtained through webplotdigitiser
 haiti_age_brackets = [0.0, 2.5, 7.5, 12.5, 17.5, 22.5, 30.0, 75.0]
-haiti_age_numbers = \
-    [0.0,
-     16.084033613445378 - 2.4465786314525806,
-     18.151260504201684 - 4.084033613445381,
-     16.18487394957983 - 4.3361344537815185,
-     9.57983193277311 - 4.184873949579835,
-     1.260504201680675 - 1.008403361344545,
-     0.5546218487395009 - 0.2521008403361371,
-     0.0]
+haiti_age_numbers = [0.0, 16.084033613445378 - 2.4465786314525806, 18.151260504201684 - 4.084033613445381,
+                     16.18487394957983 - 4.3361344537815185, 9.57983193277311 - 4.184873949579835,
+                     1.260504201680675 - 1.008403361344545, 0.5546218487395009 - 0.2521008403361371, 0.0]
 data_arrays["haiti"] = np.zeros((len(haiti_age_numbers), 2))
 data_arrays["haiti"][:, 0] = haiti_age_brackets
 data_arrays["haiti"][:, 1] = normalise_to_upper_value(haiti_age_numbers, upper_point_of_patch)
 
 # create data structures for aronson age bracket arrays (from aronson 1948)
-aronson_cohort_sizes = \
-    [0] + duplicate_list_values(normalise_to_upper_value([433 + 413, 659 + 624, 387 + 351, 72 + 69],
-                                                         upper_point_of_patch)) + [0]
+aronson_cohort_sizes = [0] + duplicate_list_values(normalise_to_upper_value([433 + 413, 659 + 624, 387 + 351, 72 + 69],
+                                                                            upper_point_of_patch)) + [0]
 data_arrays["aronson"] = np.zeros((len(aronson_cohort_sizes), 2))
 data_arrays["aronson"][:, 0] = duplicate_list_values(list(range(0, 25, 5)))
 data_arrays["aronson"][:, 1] = aronson_cohort_sizes
@@ -112,13 +108,8 @@ muscogee_russell_age_brackets = duplicate_list_values(np.linspace(0.0, 70.0, 15)
 data_arrays["muscogee-russell"] = np.zeros((len(muscogee_russell_age_numbers), 2))
 data_arrays["muscogee-russell"][:, 0] = muscogee_russell_age_brackets
 data_arrays["muscogee-russell"][:, 1] = normalise_to_upper_value(muscogee_russell_age_numbers, upper_point_of_patch)
-muscogee_russell_average = \
-    sum([i * j / sum(muscogee_russell_age_numbers) for
-         i, j in zip(muscogee_russell_age_numbers, muscogee_russell_age_brackets)])
-
-titles = ["saskatchewan", "chicago, hospital", "chicago, contact",
-          "mumbai", "chicago, housing project", "agra", "georgia_schools", "aronson", "haiti",
-          "english cities", "puerto_rico", "chengalpattu", "madanapalle", "rand", "muscogee-russell"]
+muscogee_russell_average = sum([number * age_group / sum(muscogee_russell_age_numbers) for
+                                number, age_group in zip(muscogee_russell_age_numbers, muscogee_russell_age_brackets)])
 
 for n_name, name in enumerate(titles):
     current_axis = age_progression_graph.add_subplot(3, 5, n_name + 1, xlim=[-0.8, x_upper_lim], yticks=[],
