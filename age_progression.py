@@ -12,22 +12,24 @@ def normalise_to_upper_value(list_to_adjust, value):
 def duplicate_list_values(list_to_duplicate):
     return [element for element in list_to_duplicate for _ in (0, 1)]
 
+
 """
 preparation
 """
 
-titles = ["saskatchewan", "chicago, hospital", "chicago, contact",
-          "mumbai", "chicago, housing project", "agra", "georgia_schools", "aronson", "haiti",
-          "english cities", "puerto_rico", "chengalpattu", "madanapalle", "rand", "muscogee-russell"]
+# follow-up durations
+follow_ups = {"saskatchewan": 15.0, "chicago, hospital": 10.0, "chicago, contact": 7.0,
+              "mumbai": 2.5, "chicago, housing project": 6.0, "agra": 5.0, "georgia schools": 3.0, "native american": 50.0,
+              "haiti": 3.0, "english cities": 20.0, "puerto rico": 6.3, "chengalpattu": 15.0, "madanapalle": 21.0,
+              "rand": 3.6, "muscogee-russell": 7.0}
+
+# other inputs
 upper_point_of_patch, x_upper_lim = 0.95, 50.0
 data_arrays = {}
 age_progression_graph = plt.figure()
-age_max = [1.0, 1.0, 1.0, 1.0, 10.0, 5.0, "", "", "", 1.5, "", "", ""]
-average_ages = {}
-efficacies = [81, 70, 88, 37, 85, 60, -25, 8, 89, 78, 31, -5, "", "", ""]
-followups = [15.0, 10.0, 7.0, 2.5, 6.0, 5.0, 3.0, 50.0, 3.0, 20.0, 6.3, 15.0, 21.0, 3.6, 7.0]
 age_patch_colour = "grey"
 age_edge_colour = "black"
+arrow_adjustment = 1.4
 
 """
 data collation
@@ -42,19 +44,20 @@ data_arrays["haiti"] = np.zeros((len(haiti_age_numbers), 2))
 data_arrays["haiti"][:, 0] = haiti_age_brackets
 data_arrays["haiti"][:, 1] = normalise_to_upper_value(haiti_age_numbers, upper_point_of_patch)
 
-# create data structures for aronson age bracket arrays (from aronson 1948)
-aronson_cohort_sizes = [0] + duplicate_list_values(normalise_to_upper_value([433 + 413, 659 + 624, 387 + 351, 72 + 69],
-                                                                            upper_point_of_patch)) + [0]
-data_arrays["aronson"] = np.zeros((len(aronson_cohort_sizes), 2))
-data_arrays["aronson"][:, 0] = duplicate_list_values(list(range(0, 25, 5)))
-data_arrays["aronson"][:, 1] = aronson_cohort_sizes
+# create data structures for native american age bracket arrays (from aronson 1948)
+native_american_cohort_sizes = \
+    [0] + duplicate_list_values(normalise_to_upper_value([433 + 413, 659 + 624, 387 + 351, 72 + 69],
+                                                         upper_point_of_patch)) + [0]
+data_arrays["native american"] = np.zeros((len(native_american_cohort_sizes), 2))
+data_arrays["native american"][:, 0] = duplicate_list_values(list(range(0, 25, 5)))
+data_arrays["native american"][:, 1] = native_american_cohort_sizes
 
 # georgia schools
 georgia_schools_brackets = [6.0, 6.0, 17.0, 17.0]
 georgia_schools_numbers = [0.0, upper_point_of_patch, 0.0833333333 * upper_point_of_patch, 0.0]
-data_arrays["georgia_schools"] = np.zeros((len(georgia_schools_brackets), 2))
-data_arrays["georgia_schools"][:, 0] = georgia_schools_brackets
-data_arrays["georgia_schools"][:, 1] = georgia_schools_numbers
+data_arrays["georgia schools"] = np.zeros((len(georgia_schools_brackets), 2))
+data_arrays["georgia schools"][:, 0] = georgia_schools_brackets
+data_arrays["georgia schools"][:, 1] = georgia_schools_numbers
 
 # puerto rico
 puerto_rico_age_numbers = \
@@ -63,11 +66,10 @@ puerto_rico_age_numbers = \
      10.934655707723714, 9.74762887036407, 8.16593654304185, 7.22046189179993, 5.4413171997278,
      3.706152709254848, 2.453494492174208, 1.749053674719292]
 puerto_rico_age_brackets = [0] + duplicate_list_values(list(range(1, 20)))
-data_arrays["puerto_rico"] = np.zeros((len(puerto_rico_age_brackets), 2))
-data_arrays["puerto_rico"][:, 0] = puerto_rico_age_brackets
-data_arrays["puerto_rico"][:, 1] = duplicate_list_values(
+data_arrays["puerto rico"] = np.zeros((len(puerto_rico_age_brackets), 2))
+data_arrays["puerto rico"][:, 0] = puerto_rico_age_brackets
+data_arrays["puerto rico"][:, 1] = duplicate_list_values(
     normalise_to_upper_value(puerto_rico_age_numbers, upper_point_of_patch)) + [0.0]
-average_ages["puerto_rico"] = sum([i * j / sum(puerto_rico_age_numbers) for i, j in zip(puerto_rico_age_numbers, range(19))])
 
 # chengalpattu
 chengalpattu_male_numbers = [16199.0, 38369.0, 21289.0, 19519.0, 15700.0, 12238.0, 7739.0, 3959.0]
@@ -108,30 +110,33 @@ muscogee_russell_age_brackets = duplicate_list_values(np.linspace(0.0, 70.0, 15)
 data_arrays["muscogee-russell"] = np.zeros((len(muscogee_russell_age_numbers), 2))
 data_arrays["muscogee-russell"][:, 0] = muscogee_russell_age_brackets
 data_arrays["muscogee-russell"][:, 1] = normalise_to_upper_value(muscogee_russell_age_numbers, upper_point_of_patch)
-muscogee_russell_average = sum([number * age_group / sum(muscogee_russell_age_numbers) for
-                                number, age_group in zip(muscogee_russell_age_numbers, muscogee_russell_age_brackets)])
 
-for n_name, name in enumerate(titles):
+# maximum age, with -10 listed if not known and one used for infant vaccination to give rectangle some visible width
+maximum_age = \
+    {"saskatchewan": 1.0, "chicago, hospital": 1.0, "chicago, contact": 1.0, "mumbai": 1.0,
+     "chicago, housing project": 10.0, "agra": 5.0, "chengalpattu": -10.0, "madanapalle": -10.0, "english cities": 15.5}
+average_age = {key: age / 2.0 for key, age in maximum_age.items()}
+average_age.update(
+    {"georgia schools": 12.0,
+     "native american": sum([age * weight / sum(native_american_cohort_sizes)
+                             for age, weight in zip(data_arrays["native american"][:, 0], native_american_cohort_sizes)]),
+     "haiti": 9.0,
+     "puerto rico": sum([n_age * int_age / sum(puerto_rico_age_numbers)
+                         for n_age, int_age in zip(puerto_rico_age_numbers, range(19))]),
+     "rand": 30.3,
+     "muscogee-russell": sum([number * (age_group + 2.5) / sum(muscogee_russell_age_numbers) for
+                              number, age_group in zip(muscogee_russell_age_numbers, muscogee_russell_age_brackets)]),
+     "english cities": 14.75,
+     "madanapalle":
+         sum([i * (j + 2.5) / sum(madanapalle_numbers) for i, j in zip(madanapalle_numbers, list(range(5, 45, 10)))]),
+     "chengalpattu":
+        sum([i * (j + 5.0) / sum(chengalpattu_numbers)
+             for i, j in zip(chengalpattu_numbers, [-2.5] + list(range(5, 75, 10)))])})
+
+for n_name, name in enumerate(follow_ups.keys()):
     current_axis = age_progression_graph.add_subplot(3, 5, n_name + 1, xlim=[-0.8, x_upper_lim], yticks=[],
                                                      xticks=list(np.linspace(0.0, 50.0, 6)))
-    current_axis.set_title(titles[n_name], fontsize=8)
-    if n_name < 6:
-        average_age = age_max[n_name] / 2.0
-    elif n_name == 6:
-        average_age = 12.0
-    elif n_name == 7:
-        average_age = sum([age * weight / sum(aronson_cohort_sizes)
-                           for age, weight in zip(data_arrays["aronson"][:, 0], aronson_cohort_sizes)])
-    elif n_name == 8:
-        average_age = 9.0
-    elif n_name == 9:
-        average_age = 14.75
-    elif n_name == 10:
-        average_age = average_ages["puerto_rico"]
-    elif n_name == 13:
-        average_age = 30.3
-    elif n_name == 14:
-        average_age = muscogee_russell_average
+    current_axis.set_title(name, fontsize=8)
 
     # use the pre-defined patch array if available
     if name in data_arrays:
@@ -139,14 +144,15 @@ for n_name, name in enumerate(titles):
 
     # otherwise plot a rectangle
     else:
-        age_min = 14.0 if n_name == 9 else 0.0
-        cohort = patches.Rectangle((age_min, 0.0), age_max[n_name], upper_point_of_patch, facecolor=age_patch_colour,
-                                   edgecolor=age_edge_colour)
+        age_min = 14.0 if name == "english cities" else 0.0
+        cohort = patches.Rectangle(
+            (age_min, 0.0), maximum_age[name] - age_min, upper_point_of_patch, facecolor=age_patch_colour,
+            edgecolor=age_edge_colour)
 
     # adding and subtracting 0.5 seems to be needed because arrows come out a bit smaller than they should
     followup = patches.FancyArrowPatch(
-        (average_age - 0.5, upper_point_of_patch / 2.0),
-        (followups[n_name] + average_age + 0.5, upper_point_of_patch / 2.0),
+        (average_age[name] - arrow_adjustment, upper_point_of_patch / 2.0),
+        (follow_ups[name] + average_age[name] + arrow_adjustment, upper_point_of_patch / 2.0),
         mutation_scale=10, edgecolor="black", facecolor="darkred")
 
     current_axis.add_patch(cohort)
