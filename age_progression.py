@@ -22,7 +22,7 @@ follow_ups = {"chengalpattu": 15.0,
               "madanapalle": 21.0,
               "rand": 3.6,
               "lincoln": 12.0,
-              "chicago, housing project": 6.0,
+              "chicago housing project": 6.0,
               "muscogee-russell": 7.0,
               "english cities": 20.0,
               "chicago nursing": 3.0,
@@ -34,13 +34,13 @@ follow_ups = {"chengalpattu": 15.0,
               "georgia schools": 3.0,
               "agra": 5.0,
               "saskatchewan": 15.0,
-              "chicago, hospital": 10.0,
-              "chicago, contact": 7.0,
+              "chicago hospital": 10.0,
+              "chicago contact": 7.0,
               "mumbai": 2.5,
               "native american infants": 8.0}
 
 # other inputs
-upper_point_of_patch, x_upper_lim = 0.95, 70.0
+upper_point_of_patch, x_upper_lim = 0.92, 60.0
 data_arrays = {}
 age_progression_graph = plt.figure()
 age_patch_colour = "grey"
@@ -144,8 +144,8 @@ data_arrays["lincoln"][:, 1] = \
 
 # maximum age, with -10 listed if not known and one used for infant vaccination to give rectangle some visible width
 maximum_age = \
-    {"saskatchewan": 1.0, "chicago, hospital": 1.0, "chicago, contact": 1.0, "mumbai": 1.0,
-     "chicago, housing project": 10.0, "agra": 5.0, "english cities": 15.5,
+    {"saskatchewan": 1.0, "chicago hospital": 1.0, "chicago contact": 1.0, "mumbai": 1.0,
+     "chicago housing project": 10.0, "agra": 5.0, "english cities": 15.5,
      "native american infants": 1.0, "chicago nursing": 20.0, "chicago mental health": 66.0}
 average_age = {key: age / 2.0 for key, age in maximum_age.items()}
 average_age.update(
@@ -171,10 +171,10 @@ average_age.update(
 
 age_distribution_known = {
     "saskatchewan": False,
-    "chicago, hospital": False,
-    "chicago, contact": False,
+    "chicago hospital": False,
+    "chicago contact": False,
     "mumbai": False,
-    "chicago, housing project": False,
+    "chicago housing project": False,
     "agra": False,
     "georgia schools": False,
     "native american": True,
@@ -197,8 +197,13 @@ age_mins = {"english cities": 14.0,
 
 for n_name, name in enumerate(follow_ups.keys()):
     current_axis = age_progression_graph.add_subplot(
-        4, 5, n_name + 1, xlim=[-0.8, x_upper_lim], yticks=[], xticks=list(np.linspace(0.0, 50.0, 6)))
-    current_axis.set_title(name, fontsize=8)
+        4, 5, n_name + 1, xlim=[-0.8, x_upper_lim], yticks=[], xticks=list(np.linspace(0.0, 60.0, 7)))
+    current_axis.set_title(name, fontsize=6.5, pad=1.5)
+    if n_name < 15:
+        current_axis.xaxis.set_ticks_position("none")
+        current_axis.axes.get_xaxis().set_ticklabels([])
+    for tick in current_axis.xaxis.get_major_ticks():
+        tick.label.set_fontsize(6)
 
     line_width = 0.5 if age_distribution_known[name] else 0.0
     patch_alpha = 1.0 if age_distribution_known[name] else 0.7
@@ -210,7 +215,7 @@ for n_name, name in enumerate(follow_ups.keys()):
 
     # otherwise plot a rectangle
     else:
-        age_min = age_mins[name] if name in age_mins else 0.0
+        age_min = age_mins[name] if name in age_mins else -0.2
         cohort = patches.Rectangle(
             (age_min, 0.0), maximum_age[name] - age_min, upper_point_of_patch, facecolor=age_patch_colour,
             edgecolor=age_edge_colour, linewidth=line_width, alpha=patch_alpha)
@@ -223,7 +228,6 @@ for n_name, name in enumerate(follow_ups.keys()):
 
     current_axis.add_patch(cohort)
     current_axis.add_patch(followup)
-    current_axis.axes.get_xaxis().set_ticklabels([])
 
 age_progression_graph.savefig("age_progression.png")
 
