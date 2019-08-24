@@ -18,13 +18,29 @@ preparation
 """
 
 # follow-up durations
-follow_ups = {"saskatchewan": 15.0, "chicago, hospital": 10.0, "chicago, contact": 7.0,
-              "mumbai": 2.5, "chicago, housing project": 6.0, "agra": 5.0, "georgia schools": 3.0, "native american": 50.0,
-              "haiti": 3.0, "english cities": 20.0, "puerto rico": 6.3, "chengalpattu": 15.0, "madanapalle": 21.0,
-              "rand": 3.6, "muscogee-russell": 7.0}
+follow_ups = {"chengalpattu": 15.0,
+              "madanapalle": 21.0,
+              "rand": 3.6,
+              "lincoln": 12.0,
+              "chicago, housing project": 6.0,
+              "muscogee-russell": 7.0,
+              "english cities": 20.0,
+              "chicago nursing": 3.0,
+              "chicago medical": 4.0,
+              "chicago mental health": 4.0,
+              "puerto rico": 6.3,
+              "haiti": 3.0,
+              "native american": 50.0,
+              "georgia schools": 3.0,
+              "agra": 5.0,
+              "saskatchewan": 15.0,
+              "chicago, hospital": 10.0,
+              "chicago, contact": 7.0,
+              "mumbai": 2.5,
+              "native american infants": 8.0}
 
 # other inputs
-upper_point_of_patch, x_upper_lim = 0.95, 50.0
+upper_point_of_patch, x_upper_lim = 0.95, 70.0
 data_arrays = {}
 age_progression_graph = plt.figure()
 age_patch_colour = "grey"
@@ -96,10 +112,16 @@ data_arrays["madanapalle"][:, 0] = madanapalle_ages
 data_arrays["madanapalle"][:, 1] = [0] + duplicate_list_values(madanapalle_numbers) + [0]
 
 # rand mines
-rand_ages = np.linspace(0.0, 100.0, 1e2)
-data_arrays["rand"] = np.zeros((len(rand_ages), 2))
-data_arrays["rand"][:, 0] = rand_ages
-data_arrays["rand"][:, 1] = rand_values = normalise_to_upper_value(norm.pdf(rand_ages, 30.3, 10.3), upper_point_of_patch)
+arbitrary_ages = np.linspace(-20.0, 100.0, 1e2)
+data_arrays["rand"] = np.zeros((len(arbitrary_ages), 2))
+data_arrays["rand"][:, 0] = arbitrary_ages
+data_arrays["rand"][:, 1] = normalise_to_upper_value(norm.pdf(arbitrary_ages, 30.3, 10.3), upper_point_of_patch)
+
+# chicago medical students
+data_arrays["chicago medical"] = np.zeros((len(arbitrary_ages), 2))
+data_arrays["chicago medical"][:, 0] = arbitrary_ages
+data_arrays["chicago medical"][:, 1] = \
+    normalise_to_upper_value(norm.pdf(arbitrary_ages, 23.3, 2.0), upper_point_of_patch)
 
 # muscogee-russell trial
 muscogee_russell_age_numbers = [0.0] + duplicate_list_values(
@@ -111,10 +133,20 @@ data_arrays["muscogee-russell"] = np.zeros((len(muscogee_russell_age_numbers), 2
 data_arrays["muscogee-russell"][:, 0] = muscogee_russell_age_brackets
 data_arrays["muscogee-russell"][:, 1] = normalise_to_upper_value(muscogee_russell_age_numbers, upper_point_of_patch)
 
+# lincoln state school
+lincoln_ages = [19.0, 17.0, 44.0, 16.0, 30.0, 14.0, 18.0, 17.0, 15.0, 17.0, 17.0, 24.0,
+                13.0, 16.0, 31.0, 14.0, 8.0, 18.0, 17.0, 11.0]
+data_arrays["lincoln"] = np.zeros((len(arbitrary_ages), 2))
+data_arrays["lincoln"][:, 0] = arbitrary_ages
+data_arrays["lincoln"][:, 1] = \
+    normalise_to_upper_value(norm.pdf(arbitrary_ages, np.mean(lincoln_ages), np.std(lincoln_ages)),
+                             upper_point_of_patch)
+
 # maximum age, with -10 listed if not known and one used for infant vaccination to give rectangle some visible width
 maximum_age = \
     {"saskatchewan": 1.0, "chicago, hospital": 1.0, "chicago, contact": 1.0, "mumbai": 1.0,
-     "chicago, housing project": 10.0, "agra": 5.0, "chengalpattu": -10.0, "madanapalle": -10.0, "english cities": 15.5}
+     "chicago, housing project": 10.0, "agra": 5.0, "english cities": 15.5,
+     "native american infants": 1.0, "chicago nursing": 20.0, "chicago mental health": 66.0}
 average_age = {key: age / 2.0 for key, age in maximum_age.items()}
 average_age.update(
     {"georgia schools": 12.0,
@@ -131,25 +163,59 @@ average_age.update(
          sum([i * (j + 2.5) / sum(madanapalle_numbers) for i, j in zip(madanapalle_numbers, list(range(5, 45, 10)))]),
      "chengalpattu":
         sum([i * (j + 5.0) / sum(chengalpattu_numbers)
-             for i, j in zip(chengalpattu_numbers, [-2.5] + list(range(5, 75, 10)))])})
+             for i, j in zip(chengalpattu_numbers, [-2.5] + list(range(5, 75, 10)))]),
+     "chicago nursing": 19.0,
+     "chicago medical": 23.0,
+     "chicago mental health": (66.0 - 18.0) / 2.0 + 18.0,
+     "lincoln": np.mean(lincoln_ages)})
+
+age_distribution_known = {
+    "saskatchewan": False,
+    "chicago, hospital": False,
+    "chicago, contact": False,
+    "mumbai": False,
+    "chicago, housing project": False,
+    "agra": False,
+    "georgia schools": False,
+    "native american": True,
+    "haiti": True,
+    "english cities": False,
+    "puerto rico": True,
+    "chengalpattu": True,
+    "madanapalle": True,
+    "rand": False,
+    "muscogee-russell": True,
+    "native american infants": False,
+    "chicago nursing": False,
+    "chicago medical": False,
+    "chicago mental health": False,
+    "lincoln": False}
+
+age_mins = {"english cities": 14.0,
+            "chicago nursing": 18.0,
+            "chicago mental health": 18.0}
 
 for n_name, name in enumerate(follow_ups.keys()):
-    current_axis = age_progression_graph.add_subplot(3, 5, n_name + 1, xlim=[-0.8, x_upper_lim], yticks=[],
-                                                     xticks=list(np.linspace(0.0, 50.0, 6)))
+    current_axis = age_progression_graph.add_subplot(
+        4, 5, n_name + 1, xlim=[-0.8, x_upper_lim], yticks=[], xticks=list(np.linspace(0.0, 50.0, 6)))
     current_axis.set_title(name, fontsize=8)
+
+    line_width = 0.5 if age_distribution_known[name] else 0.0
+    patch_alpha = 1.0 if age_distribution_known[name] else 0.7
 
     # use the pre-defined patch array if available
     if name in data_arrays:
-        cohort = patches.Polygon(data_arrays[name], facecolor=age_patch_colour, edgecolor=age_edge_colour)
+        cohort = patches.Polygon(data_arrays[name], facecolor=age_patch_colour, edgecolor=age_edge_colour,
+                                 linewidth=line_width, alpha=patch_alpha)
 
     # otherwise plot a rectangle
     else:
-        age_min = 14.0 if name == "english cities" else 0.0
+        age_min = age_mins[name] if name in age_mins else 0.0
         cohort = patches.Rectangle(
             (age_min, 0.0), maximum_age[name] - age_min, upper_point_of_patch, facecolor=age_patch_colour,
-            edgecolor=age_edge_colour)
+            edgecolor=age_edge_colour, linewidth=line_width, alpha=patch_alpha)
 
-    # adding and subtracting 0.5 seems to be needed because arrows come out a bit smaller than they should
+    # adding and subtracting a small value seems to be needed because arrows come out a bit smaller than they should
     followup = patches.FancyArrowPatch(
         (average_age[name] - arrow_adjustment, upper_point_of_patch / 2.0),
         (follow_ups[name] + average_age[name] + arrow_adjustment, upper_point_of_patch / 2.0),
@@ -160,7 +226,6 @@ for n_name, name in enumerate(follow_ups.keys()):
     current_axis.axes.get_xaxis().set_ticklabels([])
 
 age_progression_graph.savefig("age_progression.png")
-
 
 # little scratch pad for estimating parameters to trapezoidal patch to approximate ages of georgia school study
 # georgia_ages = list(range(6, 18))
