@@ -97,9 +97,9 @@ chengalpattu_numbers \
        for males, females, male_props, female_props in
        zip(chengalpattu_male_numbers, chengalpattu_female_numbers,
            chengalpattu_male_tstpos_props, chengalpattu_female_tstpos_props)], upper_point_of_patch)
-data_arrays["chengalpattu"] = np.zeros((len(chengalpattu_numbers) * 2, 2))
-data_arrays["chengalpattu"][:, 0] = [0] + duplicate_list_values(list(range(5, 75, 10))) + [0]
-data_arrays["chengalpattu"][:, 1] = duplicate_list_values(chengalpattu_numbers)
+data_arrays["chengalpattu"] = np.zeros((len(chengalpattu_numbers) * 2 + 2, 2))
+data_arrays["chengalpattu"][:, 0] = duplicate_list_values([0] + list(range(5, 85, 10)))
+data_arrays["chengalpattu"][:, 1] = [0] + duplicate_list_values(chengalpattu_numbers) + [0]
 
 # madanapalle
 madanapalle_vaccinated_numbers = [1812.0, 1791.0, 645.0, 415.0, 366.0]
@@ -199,6 +199,14 @@ for n_name, name in enumerate(follow_ups.keys()):
     current_axis = age_progression_graph.add_subplot(
         4, 5, n_name + 1, xlim=[-0.8, x_upper_lim], yticks=[], xticks=list(np.linspace(0.0, 60.0, 7)))
     current_axis.set_title(name, fontsize=6.5, pad=1.5)
+
+    lightening = 0.2
+    for n_patch in np.linspace(0.0, 1.0, 1e2):
+        background_patch = patches.Rectangle((n_patch * x_upper_lim, 0.0), x_upper_lim, 1.0,
+                                             facecolor=(1.0 - n_patch * (1.0 - lightening),
+                                                        lightening, n_patch * (1.0 - lightening) + lightening))
+        current_axis.add_patch(background_patch)
+
     if n_name < 15:
         current_axis.xaxis.set_ticks_position("none")
         current_axis.axes.get_xaxis().set_ticklabels([])
@@ -224,7 +232,7 @@ for n_name, name in enumerate(follow_ups.keys()):
     followup = patches.FancyArrowPatch(
         (average_age[name] - arrow_adjustment, upper_point_of_patch / 2.0),
         (follow_ups[name] + average_age[name] + arrow_adjustment, upper_point_of_patch / 2.0),
-        mutation_scale=10, edgecolor="black", facecolor="darkred")
+        mutation_scale=10, edgecolor="black", facecolor="k")
 
     current_axis.add_patch(cohort)
     current_axis.add_patch(followup)
