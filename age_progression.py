@@ -195,17 +195,74 @@ age_mins = {"english cities": 14.0,
             "chicago nursing": 18.0,
             "chicago mental health": 18.0}
 
+lightening = 0.3
+
+
+def create_high_mod_patch(n_patch):
+    return patches.Rectangle((n_patch * x_upper_lim, 0.0), x_upper_lim, 1.0,
+                             facecolor=(1.0 - n_patch * (1.0 - lightening),
+                                        lightening,
+                                        n_patch * (1.0 - lightening - 0.25) + lightening + 0.25))
+
+
+def create_mod_low_patch(n_patch):
+    return patches.Rectangle((n_patch * x_upper_lim, 0.0), x_upper_lim, 1.0,
+                             facecolor=(0.5 - 0.5 * n_patch * (1.0 - lightening),
+                                        lightening,
+                                        n_patch * (1.0 - lightening) + lightening))
+
+def create_low_mod_low_patch(n_patch):
+    return patches.Rectangle((n_patch * x_upper_lim, 0.0), x_upper_lim, 1.0,
+                             facecolor=(0.25 - 0.25 * n_patch * (1.0 - lightening),
+                                        lightening,
+                                        n_patch * (1.0 - lightening) + lightening))
+
+
+background_dict = {
+    "saskatchewan": "mod_low",
+    "chicago hospital": "high",
+    "chicago contact": "high",
+    "mumbai": "high",
+    "chicago housing project": "high",
+    "agra": "high",
+    "georgia schools": "low",
+    "native american": "mod_low",
+    "haiti": "high",
+    "english cities": "mod_low",
+    "puerto rico": "mod_low",
+    "chengalpattu": "high",
+    "madanapalle": "high_mod",
+    "rand": "high",
+    "muscogee-russell": "low-mod_low",
+    "native american infants": "mod_low",
+    "chicago nursing": "high",
+    "chicago medical": "high",
+    "chicago mental health": "low",
+    "lincoln": "high"}
+
 for n_name, name in enumerate(follow_ups.keys()):
     current_axis = age_progression_graph.add_subplot(
         4, 5, n_name + 1, xlim=[-0.8, x_upper_lim], yticks=[], xticks=list(np.linspace(0.0, 60.0, 7)))
     current_axis.set_title(name, fontsize=6.5, pad=1.5)
 
-    lightening = 0.2
     for n_patch in np.linspace(0.0, 1.0, 1e2):
-        background_patch = patches.Rectangle((n_patch * x_upper_lim, 0.0), x_upper_lim, 1.0,
-                                             facecolor=(1.0 - n_patch * (1.0 - lightening),
-                                                        lightening, n_patch * (1.0 - lightening) + lightening))
-        current_axis.add_patch(background_patch)
+        if background_dict[name] == "high_mod":
+            background_patch = create_high_mod_patch(n_patch)
+            current_axis.add_patch(background_patch)
+        elif background_dict[name] == "high":
+            background_patch = patches.Rectangle((n_patch * x_upper_lim, 0.0), x_upper_lim, 1.0,
+                                                 facecolor=(1.0, lightening, lightening))
+            current_axis.add_patch(background_patch)
+        elif background_dict[name] == "low":
+            background_patch = patches.Rectangle((n_patch * x_upper_lim, 0.0), x_upper_lim, 1.0,
+                                                 facecolor=(lightening, lightening, 1.0))
+            current_axis.add_patch(background_patch)
+        elif background_dict[name] == "mod_low":
+            background_patch = create_mod_low_patch(n_patch)
+            current_axis.add_patch(background_patch)
+        elif background_dict[name] == "low-mod_low":
+            background_patch = create_low_mod_low_patch(n_patch)
+            current_axis.add_patch(background_patch)
 
     if n_name < 15:
         current_axis.xaxis.set_ticks_position("none")
@@ -214,7 +271,8 @@ for n_name, name in enumerate(follow_ups.keys()):
         tick.label.set_fontsize(6)
 
     line_width = 0.5 if age_distribution_known[name] else 0.0
-    patch_alpha = 1.0 if age_distribution_known[name] else 0.7
+    # patch_alpha = 1.0 if age_distribution_known[name] else 0.7
+    patch_alpha = 1.0
 
     # use the pre-defined patch array if available
     if name in data_arrays:
