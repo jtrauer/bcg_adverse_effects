@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="359df79e-5e05-4b05-b4bf-4747f20da3f7" name="Default Changelist" comment="update order of sub-plots again">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/age_progression.py" beforeDir="false" afterPath="$PROJECT_DIR$/age_progression.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -169,22 +168,22 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2610" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600316343325" />
-    <state width="1899" height="321" key="GridCell.Tab.0.bottom" timestamp="1600316387556">
+    <state width="1899" height="321" key="GridCell.Tab.0.bottom" timestamp="1600316688369">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="321" key="GridCell.Tab.0.bottom/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600316387556" />
-    <state width="1899" height="321" key="GridCell.Tab.0.center" timestamp="1600316387555">
+    <state width="1899" height="321" key="GridCell.Tab.0.bottom/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600316688369" />
+    <state width="1899" height="321" key="GridCell.Tab.0.center" timestamp="1600316688369">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="321" key="GridCell.Tab.0.center/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600316387555" />
-    <state width="1899" height="321" key="GridCell.Tab.0.left" timestamp="1600316387555">
+    <state width="1899" height="321" key="GridCell.Tab.0.center/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600316688369" />
+    <state width="1899" height="321" key="GridCell.Tab.0.left" timestamp="1600316688368">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="321" key="GridCell.Tab.0.left/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600316387555" />
-    <state width="1899" height="321" key="GridCell.Tab.0.right" timestamp="1600316387555">
+    <state width="1899" height="321" key="GridCell.Tab.0.left/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600316688368" />
+    <state width="1899" height="321" key="GridCell.Tab.0.right" timestamp="1600316688369">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="321" key="GridCell.Tab.0.right/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600316387555" />
+    <state width="1899" height="321" key="GridCell.Tab.0.right/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600316688369" />
     <state width="1899" height="416" key="GridCell.Tab.1.bottom" timestamp="1600316185569">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
@@ -201,6 +200,10 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1899" height="416" key="GridCell.Tab.1.right/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600316185569" />
+    <state x="2697" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1600316430271">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2697" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600316430271" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -212,12 +215,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/age_progression.py</url>
-          <line>314</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/age_progression.py</url>
-          <line>340</line>
+          <line>221</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>

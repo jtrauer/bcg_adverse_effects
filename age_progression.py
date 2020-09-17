@@ -11,6 +11,12 @@ BASE_PATH = separator.join(filepath.split(separator)[:-1])
 folder_name = "figures"
 figure_folder = os.path.join(BASE_PATH, folder_name)
 
+
+"""
+static functions
+"""
+
+
 def normalise_to_upper_value(list_to_adjust, value):
     return [element / max(list_to_adjust) * value for element in list_to_adjust]
 
@@ -22,28 +28,6 @@ def duplicate_list_values(list_to_duplicate):
 """
 preparation
 """
-
-# follow-up durations
-follow_ups = {"chengalpattu": 15.0,
-              "madanapalle": 21.0,
-              "muscogee-russell": 7.0,
-              "english cities": 20.0,
-              "lincoln": 12.0,
-              "rand": 3.6,
-              "chicago nursing": 3.0,
-              "chicago medical": 4.0,
-              "chicago mental health": 4.0,
-              "haiti": 3.0,
-              "puerto rico": 6.3,
-              "native american": 50.0,
-              "chicago housing project": 6.0,
-              "georgia schools": 3.0,
-              "agra": 5.0,
-              "saskatchewan": 15.0,
-              "chicago hospital": 10.0,
-              "chicago contact": 7.0,
-              "mumbai": 2.5,
-              "native american infants": 8.0}
 
 # other inputs
 upper_point_of_patch, x_upper_lim = 0.92, 60.0
@@ -58,7 +42,7 @@ arrow_adjustment = 1.4
 data collation
 """
 
-# getting haiti data, obtained through webplotdigitiser
+# getting haiti data, obtained through WebPlotDigitiser
 haiti_age_brackets = [0.0, 2.5, 7.5, 12.5, 17.5, 22.5, 30.0, 75.0]
 haiti_age_numbers = [0.0, 16.084033613445378 - 2.4465786314525806, 18.151260504201684 - 4.084033613445381,
                      16.18487394957983 - 4.3361344537815185, 9.57983193277311 - 4.184873949579835,
@@ -67,7 +51,7 @@ data_arrays["haiti"] = np.zeros((len(haiti_age_numbers), 2))
 data_arrays["haiti"][:, 0] = haiti_age_brackets
 data_arrays["haiti"][:, 1] = normalise_to_upper_value(haiti_age_numbers, upper_point_of_patch)
 
-# create data structures for native american age bracket arrays (from aronson 1948)
+# create data structures for native american age bracket arrays (from Aronson 1948)
 native_american_cohort_sizes = \
     [0] + duplicate_list_values(normalise_to_upper_value(
         [104 + 107, 82 + 93, 89 + 75, 87 + 71, 71 + 68, 100 + 93, 157 + 137, 153 + 139, 139 + 129, 111 + 125,
@@ -198,126 +182,23 @@ age_distribution_known = {
     "chicago nursing": False,
     "chicago medical": False,
     "chicago mental health": False,
-    "lincoln": False}
+    "lincoln": False
+}
 
-age_mins = {"english cities": 14.0,
-            "chicago nursing": 18.0,
-            "chicago mental health": 18.0}
-
-lightening = 0.3
-
-
-def create_high_mod_patch(n_patch):
-    mod_value = 0.5
-    return patches.Rectangle((n_patch * x_upper_lim, 0.0), x_upper_lim, 1.0,
-                             facecolor=(1.0 - n_patch * mod_value * (1.0 - lightening),
-                                        lightening,
-                                        n_patch * (1.0 - lightening - mod_value) + lightening))
+age_mins = {
+    "english cities": 14.0,
+    "chicago nursing": 18.0,
+    "chicago mental health": 18.0
+}
 
 
-def create_mod_low_patch(n_patch):
-    return patches.Rectangle((n_patch * x_upper_lim, 0.0), x_upper_lim, 1.0,
-                             facecolor=(0.5 - 0.5 * n_patch * (1.0 - lightening),
-                                        lightening,
-                                        n_patch * (1.0 - lightening) + lightening))
-
-
-def create_low_mod_low_patch(n_patch):
-    return patches.Rectangle((n_patch * x_upper_lim, 0.0), x_upper_lim, 1.0,
-                             facecolor=(0.25 - 0.25 * n_patch * (1.0 - lightening),
-                                        lightening,
-                                        n_patch * (1.0 - lightening) + lightening))
-
-
-background_dict = {
-    "saskatchewan": "mod_low",
-    "chicago hospital": "high",
-    "chicago contact": "high",
-    "mumbai": "high",
-    "chicago housing project": "high",
-    "agra": "high",
-    "georgia schools": "low",
-    "native american": "mod_low",
-    "haiti": "high",
-    "english cities": "mod_low",
-    "puerto rico": "mod_low",
-    "chengalpattu": "high",
-    "madanapalle": "high_mod",
-    "rand": "high",
-    "muscogee-russell": "low-mod_low",
-    "native american infants": "mod_low",
-    "chicago nursing": "high",
-    "chicago medical": "high",
-    "chicago mental health": "low",
-    "lincoln": "high"}
-
-
-def plot_age_context():
-    for n_name, name in enumerate(follow_ups.keys()):
-        current_axis = age_progression_graph.add_subplot(
-            4, 5, n_name + 1, xlim=[-0.8, x_upper_lim], yticks=[], xticks=list(np.linspace(0.0, 60.0, 7)))
-        current_axis.set_title(name, fontsize=6.5, pad=1.5)
-
-        for n_patch in np.linspace(0.0, 1.0, 1e2):
-            if background_dict[name] == "high_mod":
-                background_patch = create_high_mod_patch(n_patch)
-                current_axis.add_patch(background_patch)
-            elif background_dict[name] == "high":
-                background_patch = patches.Rectangle((n_patch * x_upper_lim, 0.0), x_upper_lim, 1.0,
-                                                     facecolor=(1.0, lightening, lightening))
-                current_axis.add_patch(background_patch)
-            elif background_dict[name] == "low":
-                background_patch = patches.Rectangle((n_patch * x_upper_lim, 0.0), x_upper_lim, 1.0,
-                                                     facecolor=(lightening, lightening, 1.0))
-                current_axis.add_patch(background_patch)
-            elif background_dict[name] == "mod_low":
-                background_patch = create_mod_low_patch(n_patch)
-                current_axis.add_patch(background_patch)
-            elif background_dict[name] == "low-mod_low":
-                background_patch = create_low_mod_low_patch(n_patch)
-                current_axis.add_patch(background_patch)
-
-        if n_name < 15:
-            current_axis.xaxis.set_ticks_position("none")
-            current_axis.axes.get_xaxis().set_ticklabels([])
-        for tick in current_axis.xaxis.get_major_ticks():
-            tick.label.set_fontsize(6)
-
-        line_width = 0.5 if age_distribution_known[name] else 0.0
-        # patch_alpha = 1.0 if age_distribution_known[name] else 0.7
-        patch_alpha = 1.0
-
-        # use the pre-defined patch array if available
-        if name in data_arrays:
-            cohort = patches.Polygon(data_arrays[name], facecolor=age_patch_colour, edgecolor=age_edge_colour,
-                                     linewidth=line_width, alpha=patch_alpha)
-            temporary_axis = plt.figure()
-            temporary_ax = temporary_axis.add_subplot(111, xlim=[0.0, 50.0])
-            temporary_ax.add_patch(copy.copy(cohort))
-            plt.savefig(name)
-
-        # otherwise plot a rectangle
-        else:
-            age_min = age_mins[name] if name in age_mins else -0.2
-            cohort = patches.Rectangle(
-                (age_min, 0.0), maximum_age[name] - age_min, upper_point_of_patch, facecolor=age_patch_colour,
-                edgecolor=age_edge_colour, linewidth=line_width, alpha=patch_alpha)
-
-        # adding and subtracting a small value seems to be needed because arrows come out a bit smaller than they should
-        followup = patches.FancyArrowPatch(
-            (average_age[name] - arrow_adjustment, upper_point_of_patch / 2.0),
-            (follow_ups[name] + average_age[name] + arrow_adjustment, upper_point_of_patch / 2.0),
-            mutation_scale=10, edgecolor="black", facecolor="k")
-
-        current_axis.add_patch(cohort)
-        current_axis.add_patch(followup)
-
-    age_progression_graph.savefig("age_progression.png")
+"""
+plot
+"""
 
 
 def plot_age_distribution():
-    bottom_point = -0.02
-    left_point = -1.0
+    bottom_point, left_point = -0.02, -1.
 
     for n_name, name in enumerate(
             ["native american", "puerto rico", "haiti", "muscogee-russell", "chengalpattu", "madanapalle"]):
