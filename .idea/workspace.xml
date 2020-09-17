@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="359df79e-5e05-4b05-b4bf-4747f20da3f7" name="Default Changelist" comment="update order of sub-plots again">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/age_progression.py" beforeDir="false" afterPath="$PROJECT_DIR$/age_progression.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/create_figures.py" beforeDir="false" afterPath="$PROJECT_DIR$/create_figures.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
