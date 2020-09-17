@@ -1,6 +1,13 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+import os
+
+filepath = os.path.abspath(__file__)
+separator = "\\" if "\\" in filepath else "/"
+BASE_PATH = separator.join(filepath.split(separator)[:-1])
+folder_name = "figures"
+figure_folder = os.path.join(BASE_PATH, folder_name)
 
 # get data from bettag paper
 bettag_starting_ages = [19, 17, 44, 16, 30, 14, 18, 17, 15, 17, 17, 24, 13, 16, 31, 14, 8, 18, 17, 11]
@@ -207,5 +214,5 @@ chengalpattu_axis.axes.get_yaxis().set_ticklabels([])
 chengalpattu_axis.set_title("Chengalpattu", fontsize=title_fontsize)
 chengalpattu_axis.set_xlabel("Years from vaccination", fontsize=xlabel_fontsize)
 
-# plt.show()
-reactivation_graph.savefig("reactivation.jpg", dpi=500, bbox_inches="tight")
+file_name = os.path.join(figure_folder, "reactivation.jpg")
+reactivation_graph.savefig(file_name, dpi=500, bbox_inches="tight")

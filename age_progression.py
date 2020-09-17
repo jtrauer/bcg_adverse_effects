@@ -1,10 +1,11 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import numpy as np
-import copy
 import os
 from scipy.stats import norm
+
 plt.style.use("ggplot")
+
 filepath = os.path.abspath(__file__)
 separator = "\\" if "\\" in filepath else "/"
 BASE_PATH = separator.join(filepath.split(separator)[:-1])
@@ -224,7 +225,7 @@ def plot_age_distribution():
 
 plot_age_distribution()
 
-# little scratch pad for estimating parameters to trapezoidal patch to approximate ages of georgia school study
+# scratch pad for estimating parameters to trapezoidal patch to approximate ages of georgia school study
 # georgia_ages = list(range(6, 18))
 # georgia_proportions = np.linspace(1., 0.075, 12)
 # normalised_y_values = [value / sum(georgia_proportions) for value in georgia_proportions]

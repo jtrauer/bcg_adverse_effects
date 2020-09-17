@@ -30,7 +30,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Python" />
   </component>
-  <component name="RunManager" selected="Python.age_progression">
+  <component name="RunManager" selected="Python.create_figures">
     <configuration name="age_progression" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="bcg_adverse_effects" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -75,8 +75,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.age_progression" />
         <item itemvalue="Python.create_figures" />
+        <item itemvalue="Python.age_progression" />
       </list>
     </recent_temporary>
   </component>
