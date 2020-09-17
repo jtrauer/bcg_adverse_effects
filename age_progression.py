@@ -2,9 +2,14 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import numpy as np
 import copy
+import os
 from scipy.stats import norm
 plt.style.use("ggplot")
-
+filepath = os.path.abspath(__file__)
+separator = "\\" if "\\" in filepath else "/"
+BASE_PATH = separator.join(filepath.split(separator)[:-1])
+folder_name = "figures"
+figure_folder = os.path.join(BASE_PATH, folder_name)
 
 def normalise_to_upper_value(list_to_adjust, value):
     return [element / max(list_to_adjust) * value for element in list_to_adjust]
@@ -332,7 +337,8 @@ def plot_age_distribution():
         for tick in current_axis.xaxis.get_major_ticks():
             tick.label.set_fontsize(9)
 
-    age_distribution_graph.savefig("age_distribution.jpg", dpi=500, bbox_inches="tight")
+    file_name = os.path.join(figure_folder, "age_distribution.jpg")
+    age_distribution_graph.savefig(file_name, dpi=500, bbox_inches="tight")
 
 
 plot_age_distribution()
