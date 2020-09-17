@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import numpy as np
+import copy
 from scipy.stats import norm
 plt.style.use("ggplot")
 
@@ -43,6 +44,7 @@ follow_ups = {"chengalpattu": 15.0,
 upper_point_of_patch, x_upper_lim = 0.92, 60.0
 data_arrays = {}
 age_progression_graph = plt.figure()
+age_distribution_graph = plt.figure()
 age_patch_colour = "grey"
 age_edge_colour = "black"
 arrow_adjustment = 1.4
@@ -62,10 +64,12 @@ data_arrays["haiti"][:, 1] = normalise_to_upper_value(haiti_age_numbers, upper_p
 
 # create data structures for native american age bracket arrays (from aronson 1948)
 native_american_cohort_sizes = \
-    [0] + duplicate_list_values(normalise_to_upper_value([433 + 413, 659 + 624, 387 + 351, 72 + 69],
-                                                         upper_point_of_patch)) + [0]
+    [0] + duplicate_list_values(normalise_to_upper_value(
+        [104 + 107, 82 + 93, 89 + 75, 87 + 71, 71 + 68, 100 + 93, 157 + 137, 153 + 139, 139 + 129, 111 + 125,
+         110 + 97, 89 + 85, 78 + 79, 65 + 57, 43 + 33, 32 + 32, 22 + 20, 7 + 10, 9 + 3, 2 + 3, 0 + 1],
+        upper_point_of_patch)) + [0]
 data_arrays["native american"] = np.zeros((len(native_american_cohort_sizes), 2))
-data_arrays["native american"][:, 0] = duplicate_list_values(list(range(0, 25, 5)))
+data_arrays["native american"][:, 0] = duplicate_list_values(list(range(0, 22)))
 data_arrays["native american"][:, 1] = native_american_cohort_sizes
 
 # georgia schools
@@ -199,10 +203,11 @@ lightening = 0.3
 
 
 def create_high_mod_patch(n_patch):
+    mod_value = 0.5
     return patches.Rectangle((n_patch * x_upper_lim, 0.0), x_upper_lim, 1.0,
-                             facecolor=(1.0 - n_patch * (1.0 - lightening),
+                             facecolor=(1.0 - n_patch * mod_value * (1.0 - lightening),
                                         lightening,
-                                        n_patch * (1.0 - lightening - 0.25) + lightening + 0.25))
+                                        n_patch * (1.0 - lightening - mod_value) + lightening))
 
 
 def create_mod_low_patch(n_patch):
@@ -210,6 +215,7 @@ def create_mod_low_patch(n_patch):
                              facecolor=(0.5 - 0.5 * n_patch * (1.0 - lightening),
                                         lightening,
                                         n_patch * (1.0 - lightening) + lightening))
+
 
 def create_low_mod_low_patch(n_patch):
     return patches.Rectangle((n_patch * x_upper_lim, 0.0), x_upper_lim, 1.0,
@@ -240,62 +246,96 @@ background_dict = {
     "chicago mental health": "low",
     "lincoln": "high"}
 
-for n_name, name in enumerate(follow_ups.keys()):
-    current_axis = age_progression_graph.add_subplot(
-        4, 5, n_name + 1, xlim=[-0.8, x_upper_lim], yticks=[], xticks=list(np.linspace(0.0, 60.0, 7)))
-    current_axis.set_title(name, fontsize=6.5, pad=1.5)
 
-    for n_patch in np.linspace(0.0, 1.0, 1e2):
-        if background_dict[name] == "high_mod":
-            background_patch = create_high_mod_patch(n_patch)
-            current_axis.add_patch(background_patch)
-        elif background_dict[name] == "high":
-            background_patch = patches.Rectangle((n_patch * x_upper_lim, 0.0), x_upper_lim, 1.0,
-                                                 facecolor=(1.0, lightening, lightening))
-            current_axis.add_patch(background_patch)
-        elif background_dict[name] == "low":
-            background_patch = patches.Rectangle((n_patch * x_upper_lim, 0.0), x_upper_lim, 1.0,
-                                                 facecolor=(lightening, lightening, 1.0))
-            current_axis.add_patch(background_patch)
-        elif background_dict[name] == "mod_low":
-            background_patch = create_mod_low_patch(n_patch)
-            current_axis.add_patch(background_patch)
-        elif background_dict[name] == "low-mod_low":
-            background_patch = create_low_mod_low_patch(n_patch)
-            current_axis.add_patch(background_patch)
+def plot_age_context():
+    for n_name, name in enumerate(follow_ups.keys()):
+        current_axis = age_progression_graph.add_subplot(
+            4, 5, n_name + 1, xlim=[-0.8, x_upper_lim], yticks=[], xticks=list(np.linspace(0.0, 60.0, 7)))
+        current_axis.set_title(name, fontsize=6.5, pad=1.5)
 
-    if n_name < 15:
-        current_axis.xaxis.set_ticks_position("none")
-        current_axis.axes.get_xaxis().set_ticklabels([])
-    for tick in current_axis.xaxis.get_major_ticks():
-        tick.label.set_fontsize(6)
+        for n_patch in np.linspace(0.0, 1.0, 1e2):
+            if background_dict[name] == "high_mod":
+                background_patch = create_high_mod_patch(n_patch)
+                current_axis.add_patch(background_patch)
+            elif background_dict[name] == "high":
+                background_patch = patches.Rectangle((n_patch * x_upper_lim, 0.0), x_upper_lim, 1.0,
+                                                     facecolor=(1.0, lightening, lightening))
+                current_axis.add_patch(background_patch)
+            elif background_dict[name] == "low":
+                background_patch = patches.Rectangle((n_patch * x_upper_lim, 0.0), x_upper_lim, 1.0,
+                                                     facecolor=(lightening, lightening, 1.0))
+                current_axis.add_patch(background_patch)
+            elif background_dict[name] == "mod_low":
+                background_patch = create_mod_low_patch(n_patch)
+                current_axis.add_patch(background_patch)
+            elif background_dict[name] == "low-mod_low":
+                background_patch = create_low_mod_low_patch(n_patch)
+                current_axis.add_patch(background_patch)
 
-    line_width = 0.5 if age_distribution_known[name] else 0.0
-    # patch_alpha = 1.0 if age_distribution_known[name] else 0.7
-    patch_alpha = 1.0
+        if n_name < 15:
+            current_axis.xaxis.set_ticks_position("none")
+            current_axis.axes.get_xaxis().set_ticklabels([])
+        for tick in current_axis.xaxis.get_major_ticks():
+            tick.label.set_fontsize(6)
 
-    # use the pre-defined patch array if available
-    if name in data_arrays:
+        line_width = 0.5 if age_distribution_known[name] else 0.0
+        # patch_alpha = 1.0 if age_distribution_known[name] else 0.7
+        patch_alpha = 1.0
+
+        # use the pre-defined patch array if available
+        if name in data_arrays:
+            cohort = patches.Polygon(data_arrays[name], facecolor=age_patch_colour, edgecolor=age_edge_colour,
+                                     linewidth=line_width, alpha=patch_alpha)
+            temporary_axis = plt.figure()
+            temporary_ax = temporary_axis.add_subplot(111, xlim=[0.0, 50.0])
+            temporary_ax.add_patch(copy.copy(cohort))
+            plt.savefig(name)
+
+        # otherwise plot a rectangle
+        else:
+            age_min = age_mins[name] if name in age_mins else -0.2
+            cohort = patches.Rectangle(
+                (age_min, 0.0), maximum_age[name] - age_min, upper_point_of_patch, facecolor=age_patch_colour,
+                edgecolor=age_edge_colour, linewidth=line_width, alpha=patch_alpha)
+
+        # adding and subtracting a small value seems to be needed because arrows come out a bit smaller than they should
+        followup = patches.FancyArrowPatch(
+            (average_age[name] - arrow_adjustment, upper_point_of_patch / 2.0),
+            (follow_ups[name] + average_age[name] + arrow_adjustment, upper_point_of_patch / 2.0),
+            mutation_scale=10, edgecolor="black", facecolor="k")
+
+        current_axis.add_patch(cohort)
+        current_axis.add_patch(followup)
+
+    age_progression_graph.savefig("age_progression.png")
+
+
+def plot_age_distribution():
+    bottom_point = -0.02
+    left_point = -1.0
+
+    for n_name, name in enumerate(
+            ["native american", "puerto rico", "haiti", "muscogee-russell", "chengalpattu", "madanapalle"]):
+        current_axis = age_distribution_graph.add_subplot(
+            3, 2, n_name + 1, xlim=[left_point, x_upper_lim], ylim=[bottom_point, bottom_point + 1.0], yticks=[],
+            xticks=list(np.linspace(0.0, 60.0, 7)))
+        current_axis.set_title(name.capitalize(), fontsize=9, pad=3)
+        line_width = 0.5 if age_distribution_known[name] else 0.0
+        patch_alpha = 1.0
         cohort = patches.Polygon(data_arrays[name], facecolor=age_patch_colour, edgecolor=age_edge_colour,
                                  linewidth=line_width, alpha=patch_alpha)
+        current_axis.add_patch(plt.Rectangle((left_point, bottom_point), -left_point, 1.0, facecolor="w"))
+        current_axis.add_patch(cohort)
+        if n_name < 4:
+            current_axis.xaxis.set_ticks_position("none")
+            current_axis.axes.get_xaxis().set_ticklabels([])
+        for tick in current_axis.xaxis.get_major_ticks():
+            tick.label.set_fontsize(9)
 
-    # otherwise plot a rectangle
-    else:
-        age_min = age_mins[name] if name in age_mins else -0.2
-        cohort = patches.Rectangle(
-            (age_min, 0.0), maximum_age[name] - age_min, upper_point_of_patch, facecolor=age_patch_colour,
-            edgecolor=age_edge_colour, linewidth=line_width, alpha=patch_alpha)
+    age_distribution_graph.savefig("age_distribution.jpg", dpi=500, bbox_inches="tight")
 
-    # adding and subtracting a small value seems to be needed because arrows come out a bit smaller than they should
-    followup = patches.FancyArrowPatch(
-        (average_age[name] - arrow_adjustment, upper_point_of_patch / 2.0),
-        (follow_ups[name] + average_age[name] + arrow_adjustment, upper_point_of_patch / 2.0),
-        mutation_scale=10, edgecolor="black", facecolor="k")
 
-    current_axis.add_patch(cohort)
-    current_axis.add_patch(followup)
-
-age_progression_graph.savefig("age_progression.png")
+plot_age_distribution()
 
 # little scratch pad for estimating parameters to trapezoidal patch to approximate ages of georgia school study
 # georgia_ages = list(range(6, 18))
