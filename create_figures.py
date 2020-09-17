@@ -167,7 +167,7 @@ english_cities_axis.set_title("English cities", fontsize=title_fontsize)
 english_cities_axis.axes.set_xticks(range(0, 30, 10))
 
 # chengalpattu data
-chengalpattu_data = pd.read_excel("chengalpattu_data.xlsx", header=1)
+chengalpattu_data = pd.read_excel("data/chengalpattu_data.xlsx", header=1)
 chengalpattu_data.columns = chengalpattu_data.columns.astype(str)
 chengalpattu_data = chengalpattu_data.drop([13, 14])
 chengalpattu_age_groups = [float(age.split(" ")[0]) + 2.5 for age in list(chengalpattu_data.iloc[:, 0])]
@@ -198,7 +198,7 @@ for i_age in range(len(chengalpattu_data)):
         follow_up_times,
         [chengalpattu_age_groups[i_age]] * len(follow_up_times),
         s=[marker_enlargement * i for
-           i in  chengalpattu_data.iloc[i_age, :len(follow_up_times)]],
+           i in chengalpattu_data.iloc[i_age, :len(follow_up_times)]],
         color=vaccinated_colour,
         alpha=0.5
     )
