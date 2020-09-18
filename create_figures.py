@@ -138,7 +138,6 @@ plotting
 plt.style.use("ggplot")
 x_limit = 21.
 y_limit = 70.
-xlabel_fontsize = 9.
 title_fontsize = 9.
 reactivation_graph = plt.figure()
 marker_enlargement = 1e2
@@ -158,8 +157,7 @@ axes["saskatchewan"].scatter(
     color=unvaccinated_colour, alpha=0.5
 )
 axes["saskatchewan"].axes.get_xaxis().set_ticklabels([])
-axes["saskatchewan"].set_title("Saskatchewan", fontsize=title_fontsize)
-axes["saskatchewan"].set_ylabel("Age", fontsize=xlabel_fontsize)
+axes["saskatchewan"].set_title("Saskatchewan\nnative infants", fontsize=title_fontsize)
 axes["saskatchewan"].axes.set_xticks(range(0, 30, 10))
 
 # Chicago hospital-delivered infants plot
@@ -172,7 +170,7 @@ axes["rosenthal"].scatter(
     rosenthal["times"], rosenthal["times"], s=[marker_enlargement * i for i in rosenthal["unvaccinated"]],
     color=unvaccinated_colour, alpha=0.5
 )
-axes["rosenthal"].set_title("Chicago, hospital", fontsize=title_fontsize)
+axes["rosenthal"].set_title("Chicago, hospital-\ndelivered infants", fontsize=title_fontsize)
 axes["rosenthal"].axes.get_yaxis().set_ticklabels([])
 axes["rosenthal"].axes.get_xaxis().set_ticklabels([])
 axes["rosenthal"].axes.set_xticks(range(0, 30, 10))
@@ -205,7 +203,7 @@ axes["chicago_nursing"].scatter(
     chicago_nursing["unvaccinated"], [i + chicago_nursing_assumed_age for i in chicago_nursing["unvaccinated"]],
     color=unvaccinated_colour, alpha=0.5, s=1e2
 )
-axes["chicago_nursing"].set_title("Chicago, nursing", fontsize=title_fontsize)
+axes["chicago_nursing"].set_title("Chicago,\nnursing students", fontsize=title_fontsize)
 axes["chicago_nursing"].axes.get_yaxis().set_ticklabels([])
 axes["chicago_nursing"].axes.get_xaxis().set_ticklabels([])
 axes["chicago_nursing"].axes.set_xticks(range(0, 30, 10))
@@ -220,9 +218,7 @@ axes["lincoln"].scatter(
     lincoln["durations_years"][12:], lincoln_ages[12:], marker='o', linewidth=0.0, alpha=0.5,
     color=unvaccinated_colour, s=1e2
 )
-axes["lincoln"].set_title("Lincoln state school", fontsize=title_fontsize)
-axes["lincoln"].set_xlabel("Years from vaccination", fontsize=xlabel_fontsize)
-axes["lincoln"].set_ylabel("Age", fontsize=xlabel_fontsize)
+axes["lincoln"].set_title("Lincoln State School", fontsize=title_fontsize)
 
 # Madanapalle plot
 marker_enlargement = 1e2
@@ -240,14 +236,13 @@ for age_group in madanapalle["average_starting_ages"]:
     )
 axes["madanapalle"].axes.get_yaxis().set_ticklabels([])
 axes["madanapalle"].set_title("Madanapalle", fontsize=title_fontsize)
-axes["madanapalle"].set_xlabel("Years from vaccination", fontsize=xlabel_fontsize)
 
 # Chengalpattu plot
 marker_enlargement = 3.5
 chengalpattu_age_groups[-1] = 65.  # arbitrary y-position for the last age group on the vertical axis, who are aged 60+
-chengalpattu_axis = reactivation_graph.add_subplot(236, xlim=(0, x_limit), ylim=(0, y_limit))
+axes["chengalpattu"] = reactivation_graph.add_subplot(236, xlim=(0, x_limit), ylim=(0, y_limit))
 for i_age in range(len(chengalpattu_data)):
-    chengalpattu_axis.scatter(
+    axes["chengalpattu"].scatter(
         follow_up_times,
         [chengalpattu_age_groups[i_age]] * len(follow_up_times),
         s=[marker_enlargement * i for
@@ -255,7 +250,7 @@ for i_age in range(len(chengalpattu_data)):
         color=vaccinated_colour,
         alpha=0.5
     )
-    chengalpattu_axis.scatter(
+    axes["chengalpattu"].scatter(
         follow_up_times,
         [chengalpattu_age_groups[i_age]] * len(follow_up_times),
         s=[marker_enlargement * i for
@@ -263,10 +258,23 @@ for i_age in range(len(chengalpattu_data)):
         color=unvaccinated_colour,
         alpha=0.5
     )
-chengalpattu_axis.axes.get_yaxis().set_ticklabels([])
-chengalpattu_axis.set_title("Chengalpattu", fontsize=title_fontsize)
-chengalpattu_axis.set_xlabel("Years from vaccination", fontsize=xlabel_fontsize)
+axes["chengalpattu"].axes.get_yaxis().set_ticklabels([])
+axes["chengalpattu"].set_title("Chengalpattu", fontsize=title_fontsize)
+
+# label x-axis
+for i_ax, axis in enumerate(axes):
+    xlabel_fontsize = 7 if i_ax < 4 else 8
+    axes[axis].set_xlabel("Years from vaccination", fontsize=xlabel_fontsize)
 
 # save multi-panel plot
+
+plt.subplots_adjust(
+    left=0.125,
+    bottom=0.1,
+    right=0.9,
+    top=0.9,
+    wspace=0.2,
+    hspace=0.35
+)
 file_name = os.path.join(figure_folder, "reactivation.jpg")
 reactivation_graph.savefig(file_name, dpi=500, bbox_inches="tight")
