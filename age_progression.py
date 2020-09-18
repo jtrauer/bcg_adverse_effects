@@ -44,10 +44,12 @@ data collation
 """
 
 # getting haiti data, obtained through WebPlotDigitiser
-haiti_age_brackets = [0.0, 2.5, 7.5, 12.5, 17.5, 22.5, 30.0, 75.0]
-haiti_age_numbers = [0.0, 16.084033613445378 - 2.4465786314525806, 18.151260504201684 - 4.084033613445381,
-                     16.18487394957983 - 4.3361344537815185, 9.57983193277311 - 4.184873949579835,
-                     1.260504201680675 - 1.008403361344545, 0.5546218487395009 - 0.2521008403361371, 0.0]
+haiti_age_brackets = \
+    [0.0, 2.5, 7.5, 12.5, 17.5, 22.5, 30.0, 75.0]
+haiti_age_numbers = \
+    [0.0, 16.084033613445378 - 2.4465786314525806, 18.151260504201684 - 4.084033613445381,
+     16.18487394957983 - 4.3361344537815185, 9.57983193277311 - 4.184873949579835,
+     1.260504201680675 - 1.008403361344545, 0.5546218487395009 - 0.2521008403361371, 0.0]
 data_arrays["haiti"] = np.zeros((len(haiti_age_numbers), 2))
 data_arrays["haiti"][:, 0] = haiti_age_brackets
 data_arrays["haiti"][:, 1] = normalise_to_upper_value(haiti_age_numbers, upper_point_of_patch)
@@ -118,18 +120,20 @@ data_arrays["chicago medical"][:, 1] = \
     normalise_to_upper_value(norm.pdf(arbitrary_ages, 23.3, 2.0), upper_point_of_patch)
 
 # muscogee-russell trial
-muscogee_russell_age_numbers = [0.0] + duplicate_list_values(
-    [0.2468241835849856, 9.354591859539967, 7.280231716147719, 3.7621154826078804, 2.8368957903111927,
-     2.751361064177864, 2.3271202653292953, 1.8439849456021342, 1.3459740213300453, 0.965930932138999,
-     0.4088824523292338, 0.3381518134112902, 0.10529138841956076, 0.1377244973672731]) + [0.0]
+muscogee_russell_age_numbers = \
+    [0.0] + duplicate_list_values(
+        [0.2468241835849856, 9.354591859539967, 7.280231716147719, 3.7621154826078804, 2.8368957903111927,
+         2.751361064177864, 2.3271202653292953, 1.8439849456021342, 1.3459740213300453, 0.965930932138999,
+         0.4088824523292338, 0.3381518134112902, 0.10529138841956076, 0.1377244973672731]) + [0.0]
 muscogee_russell_age_brackets = duplicate_list_values(np.linspace(0.0, 70.0, 15))
 data_arrays["muscogee-russell"] = np.zeros((len(muscogee_russell_age_numbers), 2))
 data_arrays["muscogee-russell"][:, 0] = muscogee_russell_age_brackets
 data_arrays["muscogee-russell"][:, 1] = normalise_to_upper_value(muscogee_russell_age_numbers, upper_point_of_patch)
 
 # lincoln state school
-lincoln_ages = [19.0, 17.0, 44.0, 16.0, 30.0, 14.0, 18.0, 17.0, 15.0, 17.0, 17.0, 24.0,
-                13.0, 16.0, 31.0, 14.0, 8.0, 18.0, 17.0, 11.0]
+lincoln_ages = \
+    [19.0, 17.0, 44.0, 16.0, 30.0, 14.0, 18.0, 17.0, 15.0, 17.0, 17.0, 24.0, 13.0, 16.0, 31.0, 14.0, 8.0, 18.0, 17.0,
+     11.0]
 data_arrays["lincoln"] = np.zeros((len(arbitrary_ages), 2))
 data_arrays["lincoln"][:, 0] = arbitrary_ages
 data_arrays["lincoln"][:, 1] = \
@@ -137,10 +141,18 @@ data_arrays["lincoln"][:, 1] = \
                              upper_point_of_patch)
 
 # maximum age, with -10 listed if not known and one used for infant vaccination to give rectangle some visible width
-maximum_age = \
-    {"saskatchewan": 1.0, "chicago hospital": 1.0, "chicago contact": 1.0, "mumbai": 1.0,
-     "chicago housing project": 10.0, "agra": 5.0, "english cities": 15.5,
-     "native american infants": 1.0, "chicago nursing": 20.0, "chicago mental health": 66.0}
+maximum_age = {
+    "saskatchewan": 1.0,
+    "chicago hospital": 1.0,
+    "chicago contact": 1.0,
+    "mumbai": 1.0,
+    "chicago housing project": 10.0,
+    "agra": 5.0,
+    "english cities": 15.5,
+    "native american infants": 1.0,
+    "chicago nursing": 20.0,
+    "chicago mental health": 66.0
+}
 average_age = {key: age / 2.0 for key, age in maximum_age.items()}
 average_age.update(
     {"georgia schools": 12.0,
@@ -213,15 +225,15 @@ def plot_age_distribution():
                                  linewidth=line_width, alpha=patch_alpha)
         current_axis.add_patch(plt.Rectangle((left_point, bottom_point), -left_point, 1.0, facecolor="w"))
         current_axis.add_patch(cohort)
-        if n_name < 4:
-            current_axis.xaxis.set_ticks_position("none")
-            current_axis.axes.get_xaxis().set_ticklabels([])
         for tick in current_axis.xaxis.get_major_ticks():
-            tick.label.set_fontsize(9)
+            tick.label.set_fontsize(7)
 
     file_name = os.path.join(figure_folder, "age_distribution.jpg")
+    plt.subplots_adjust(
+        wspace=0.2,
+        hspace=0.4
+    )
     age_distribution_graph.savefig(file_name, dpi=500, bbox_inches="tight")
-
 
 plot_age_distribution()
 

@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="359df79e-5e05-4b05-b4bf-4747f20da3f7" name="Default Changelist" comment="update order of sub-plots again">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/age_progression.py" beforeDir="false" afterPath="$PROJECT_DIR$/age_progression.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/create_figures.py" beforeDir="false" afterPath="$PROJECT_DIR$/create_figures.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -104,8 +105,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.create_figures" />
-        <item itemvalue="Python.temp" />
         <item itemvalue="Python.age_progression" />
+        <item itemvalue="Python.temp" />
       </list>
     </recent_temporary>
   </component>
@@ -205,26 +206,26 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2012" y="92" width="1736" height="856" key="DiffContextDialog/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600388199620" />
-    <state width="1899" height="301" key="GridCell.Tab.0.bottom" timestamp="1600395250882">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state width="1259" height="175" key="GridCell.Tab.0.bottom" timestamp="1600429926143">
+      <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1899" height="301" key="GridCell.Tab.0.bottom/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600395250882" />
-    <state width="1259" height="135" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1600345313720" />
-    <state width="1899" height="301" key="GridCell.Tab.0.center" timestamp="1600395250881">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state width="1899" height="301" key="GridCell.Tab.0.bottom/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600396860565" />
+    <state width="1259" height="175" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1600429926143" />
+    <state width="1259" height="175" key="GridCell.Tab.0.center" timestamp="1600429926143">
+      <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1899" height="301" key="GridCell.Tab.0.center/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600395250881" />
-    <state width="1259" height="135" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1600345313720" />
-    <state width="1899" height="301" key="GridCell.Tab.0.left" timestamp="1600395250881">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state width="1899" height="301" key="GridCell.Tab.0.center/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600396860565" />
+    <state width="1259" height="175" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1600429926143" />
+    <state width="1259" height="175" key="GridCell.Tab.0.left" timestamp="1600429926143">
+      <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1899" height="301" key="GridCell.Tab.0.left/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600395250881" />
-    <state width="1259" height="135" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1600345313720" />
-    <state width="1899" height="301" key="GridCell.Tab.0.right" timestamp="1600395250881">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state width="1899" height="301" key="GridCell.Tab.0.left/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600396860564" />
+    <state width="1259" height="175" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1600429926143" />
+    <state width="1259" height="175" key="GridCell.Tab.0.right" timestamp="1600429926143">
+      <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1899" height="301" key="GridCell.Tab.0.right/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600395250881" />
-    <state width="1259" height="135" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1600345313720" />
+    <state width="1899" height="301" key="GridCell.Tab.0.right/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600396860565" />
+    <state width="1259" height="175" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1600429926143" />
     <state width="1899" height="318" key="GridCell.Tab.1.bottom" timestamp="1600388244965">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
@@ -250,13 +251,8 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/age_progression.py</url>
-          <line>222</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/create_figures.py</url>
-          <line>224</line>
+          <line>213</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
