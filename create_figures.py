@@ -72,27 +72,40 @@ lincoln_ages = \
 # Madanapalle trial, Table 5 of Frimodt-Moller 1973
 madanapalle = {
     "vaccinated": 
-        [0] * 10 + [1, 0, 0, 0, 1, 1, 2, 2] + [0] * 3 + \
-        [0] * 11 + [1, 3, 1, 1, 1, 0, 1, 0, 2, 0] + \
-        [1] + [0] * 9 + [1] + [0] * 4 + [1, 0, 1, 0, 1, 0] + \
-        [0] * 9 + [1] * 4 + [0, 0, 1, 0, 0, 1, 0, 0] + \
+        [0] * 10 + [1, 0, 0, 0, 1, 1, 2, 2] + [0] * 3 +
+        [0] * 11 + [1, 3, 1, 1, 1, 0, 1, 0, 2, 0] +
+        [1] + [0] * 9 + [1] + [0] * 4 + [1, 0, 1, 0, 1, 0] +
+        [0] * 9 + [1] * 4 + [0, 0, 1, 0, 0, 1, 0, 0] +
         [0, 1] + [0] * 9 + [1, 1, 2] + [0] * 7,
     "unvaccinated":
-        [0] * 12 + [2, 0, 1, 0, 1] + [0] * 4 + \
-        [0] * 6 + [1, 0, 0, 1, 0, 1, 3, 0, 1, 2, 2, 0, 1, 1, 0] + \
-        [0] * 4 + [1, 0, 1] + [0] * 6 + [1, 1, 0, 1, 2] + [0] * 3 + \
-        [0] * 6 + [2, 1, 0, 0] + [1] * 3 + [4, 1] + [0] * 6 + \
+        [0] * 12 + [2, 0, 1, 0, 1] + [0] * 4 +
+        [0] * 6 + [1, 0, 0, 1, 0, 1, 3, 0, 1, 2, 2, 0, 1, 1, 0] +
+        [0] * 4 + [1, 0, 1] + [0] * 6 + [1, 1, 0, 1, 2] + [0] * 3 +
+        [0] * 6 + [2, 1, 0, 0] + [1] * 3 + [4, 1] + [0] * 6 +
         [1, 0, 0, 2, 1, 0, 2, 1] + [0] * 3 + [2, 2, 1] + [0] * 7,
+    "average_starting_ages":
+        [2, 10, 20, 30, 40]
 }
-madanapalle_array = np.array(madanapalle["vaccinated"])
-madanapalle_array.shape = (21, 5)
-average_starting_ages = [2, 10, 20, 30, 40]
-madanapalle_cases = \
-    pd.DataFrame(madanapalle_array, columns=average_starting_ages, index=list(range(1, 22)))
-madanapalle_array = np.array(madanapalle["unvaccinated"])
-madanapalle_array.shape = (21, 5)
-madanapalle_unvaccinated_cases = \
-    pd.DataFrame(madanapalle_array, columns=average_starting_ages, index=list(range(1, 22)))
+madanapalle["vaccinated_array"] = \
+    np.array(madanapalle["vaccinated"])
+madanapalle["vaccinated_array"].shape = \
+    (21, 5)
+madanapalle["vaccinated_cases"] = \
+    pd.DataFrame(
+        madanapalle["vaccinated_array"],
+        columns=madanapalle["average_starting_ages"],
+        index=list(range(1, 22))
+    )
+madanapalle["unvaccinated_array"] = \
+    np.array(madanapalle["unvaccinated"])
+madanapalle["unvaccinated_array"].shape = \
+    (21, 5)
+madanapalle["unvaccinated_cases"] = \
+    pd.DataFrame(
+        madanapalle["unvaccinated_array"],
+        columns=madanapalle["average_starting_ages"],
+        index=list(range(1, 22))
+    )
 
 # Chengalpattu data, loaded from data provided from collaborators in India
 chengalpattu_data = pd.read_excel("data/chengalpattu_data.xlsx", header=1)
@@ -212,16 +225,17 @@ axes["lincoln"].set_xlabel("Years from vaccination", fontsize=xlabel_fontsize)
 axes["lincoln"].set_ylabel("Age", fontsize=xlabel_fontsize)
 
 # Madanapalle plot
+marker_enlargement = 1e2
 axes["madanapalle"] = reactivation_graph.add_subplot(235, title="Madanapalle", xlim=(0, x_limit), ylim=(0, y_limit))
-for age_group in average_starting_ages:
+for age_group in madanapalle["average_starting_ages"]:
     axes["madanapalle"].scatter(
-        madanapalle_cases.index.values, madanapalle_cases.index.values + age_group, marker="o",
-        s=marker_enlargement * madanapalle_cases[age_group],
+        madanapalle["vaccinated_cases"].index.values, madanapalle["vaccinated_cases"].index.values + age_group, marker="o",
+        s=marker_enlargement * madanapalle["vaccinated_cases"][age_group],
         color=vaccinated_colour, alpha=0.5
     )
     axes["madanapalle"].scatter(
-        madanapalle_unvaccinated_cases.index.values, madanapalle_unvaccinated_cases.index.values + age_group,
-        marker="o", s=marker_enlargement * madanapalle_unvaccinated_cases[age_group], color=unvaccinated_colour,
+        madanapalle["unvaccinated_cases"].index.values, madanapalle["unvaccinated_cases"].index.values + age_group,
+        marker="o", s=marker_enlargement * madanapalle["unvaccinated_cases"][age_group], color=unvaccinated_colour,
         alpha=0.5
     )
 axes["madanapalle"].axes.get_yaxis().set_ticklabels([])
