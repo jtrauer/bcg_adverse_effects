@@ -259,8 +259,8 @@ for i_ax, axis in enumerate(axes):
 
 # save multi-panel plot
 plt.subplots_adjust(
-    wspace=0.4,
-    hspace=0.35
+    wspace=0.45,
+    hspace=0.4
 )
 file_name = os.path.join(figure_folder, "reactivation.jpg")
 reactivation_graph.savefig(file_name, dpi=500, bbox_inches="tight")
