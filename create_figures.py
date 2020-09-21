@@ -14,96 +14,100 @@ input data from trial reports
 """
 
 # Saskatchewan data, from Table IV of Ferguson 1949
-saskatchewan = {
-    "vaccinated":
-        [2, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1],
-    "unvaccinated":
-        [3, 3, 0, 6, 4, 1, 5, 4, 0, 0, 0],
-    "times":
-        [i + 0.5 for i in range(11)],
+data = {
+    "saskatchewan": {
+        "vaccinated": [2, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1],
+        "unvaccinated": [3, 3, 0, 6, 4, 1, 5, 4, 0, 0, 0],
+        "times": [i + 0.5 for i in range(11)],
+    }
 }
 
-# **** rosenthal data ****
-rosenthal = {
-    "vaccinated":
-        [0] * 5 + [2, 2, 3, 1, 2, 2, 2, 0, 0, 1] + [0] * 16 + [1, 0],
-    "unvaccinated":
-        [0, 3, 5, 1, 4, 4, 6, 5, 5, 6, 7, 1, 4, 2, 2, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1] + [0] * 8,
-    "times":
-        np.linspace(0.0, 16.0, 33),
-}
+# Chicago hospital-delivered infants, Figure 1 of Rosenthal 1961
+data.update(
+    {
+        "chicago_hosp_delivered": {
+            "vaccinated": [0] * 5 + [2, 2, 3, 1, 2, 2, 2, 0, 0, 1] + [0] * 16 + [1, 0],
+            "unvaccinated": [0, 3, 5, 1, 4, 4, 6, 5, 5, 6, 7, 1, 4, 2, 2, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1] + [0] * 8,
+            "times": np.linspace(0.0, 16.0, 33),
+        }
+    }
+)
 
 # English cities data, Table 3 of Medical Research Council 1972
-english_cities = {
-    "vaccinated":
-        [14, 13, 13, 9, 2, 5, 3, 3],
-    "unvaccinated":
-        [68, 92, 41, 26, 11, 5, 2, 3],
-    "times":
-        np.linspace(1.25, 18.75, 8),
-}
+data.update(
+    {
+        "english_cities": {
+            "vaccinated": [14, 13, 13, 9, 2, 5, 3, 3],
+            "unvaccinated": [68, 92, 41, 26, 11, 5, 2, 3],
+            "times": np.linspace(1.25, 18.75, 8),
+        }
+    }
+)
 english_cities_assumed_age = \
     14.7 + 1.25
 
 # Chicago nursing data, Table 3 of Rosenthal et al 1963
-chicago_nursing = {
-    "vaccinated":
-        [3 + 4 / 12, 2 + 4 / 12],
-    "unvaccinated":
-        [3 + 4 / 12, 2 + 9 / 12, 2 + 11 / 12, 1 + 3 / 12, 3],
-}
+data.update(
+    {
+        "chicago_nursing": {
+            "vaccinated": [3 + 4 / 12, 2 + 4 / 12],
+            "unvaccinated": [3 + 4 / 12, 2 + 9 / 12, 2 + 11 / 12, 1 + 3 / 12, 3],
+        }
+    }
+)
 chicago_nursing_assumed_age = \
     18.0
 
 # Lincoln State School, USA, Tables 1 and 2 of Bettag 1964
-lincoln = {
-    "starting_ages": [19, 17, 44, 16, 30, 14, 18, 17, 15, 17, 17, 24, 13, 16, 31, 14, 8, 18, 17, 11],
-    "durations_months":
-        [2 * 12 - 3, 3 * 12 - 1, 4 * 12 - 11, 4 * 12 - 9, 4 * 12 - 6, 6 * 12 - 9, 6 * 12 - 8, 8 * 12 - 8, 8 * 12 - 1,
-         9 * 12 - 0, 11 * 12 - 1, 11 * 12 - 6, 1 * 12 - 8, 2 * 12 - 3, 9 * 12 - 0, 4 * 12 - 2, 4 * 12 - 2, 6 * 12 - 6,
-         6 * 12 - 6, 11 * 12 - 1]
-}
-lincoln["durations_years"] = \
-    [i / 12.0 for i in lincoln["durations_months"]]
+data.update(
+    {
+        "lincoln": {
+            "starting_ages": [19, 17, 44, 16, 30, 14, 18, 17, 15, 17, 17, 24, 13, 16, 31, 14, 8, 18, 17, 11],
+            "durations_months": [2 * 12 - 3, 3 * 12 - 1, 4 * 12 - 11, 4 * 12 - 9, 4 * 12 - 6, 6 * 12 - 9, 6 * 12 - 8,
+                                 8 * 12 - 8, 8 * 12 - 1, 9 * 12 - 0, 11 * 12 - 1, 11 * 12 - 6, 1 * 12 - 8, 2 * 12 - 3,
+                                 9 * 12 - 0, 4 * 12 - 2, 4 * 12 - 2, 6 * 12 - 6, 6 * 12 - 6, 11 * 12 - 1]
+        }
+    }
+)
+data["lincoln"]["durations_years"] = \
+    [i / 12.0 for i in data["lincoln"]["durations_months"]]
 # assuming that the data on ages presented is the age at vaccination
 lincoln_ages = \
-    [i + j for i, j in zip(lincoln["starting_ages"], lincoln["durations_years"])]
+    [i + j for i, j in zip(data["lincoln"]["starting_ages"], data["lincoln"]["durations_years"])]
 
 # Madanapalle trial, Table 5 of Frimodt-Moller 1973
-madanapalle = {
-    "vaccinated": 
-        [0] * 10 + [1, 0, 0, 0, 1, 1, 2, 2] + [0] * 3 +
-        [0] * 11 + [1, 3, 1, 1, 1, 0, 1, 0, 2, 0] +
-        [1] + [0] * 9 + [1] + [0] * 4 + [1, 0, 1, 0, 1, 0] +
-        [0] * 9 + [1] * 4 + [0, 0, 1, 0, 0, 1, 0, 0] +
-        [0, 1] + [0] * 9 + [1, 1, 2] + [0] * 7,
-    "unvaccinated":
-        [0] * 12 + [2, 0, 1, 0, 1] + [0] * 4 +
-        [0] * 6 + [1, 0, 0, 1, 0, 1, 3, 0, 1, 2, 2, 0, 1, 1, 0] +
-        [0] * 4 + [1, 0, 1] + [0] * 6 + [1, 1, 0, 1, 2] + [0] * 3 +
-        [0] * 6 + [2, 1, 0, 0] + [1] * 3 + [4, 1] + [0] * 6 +
-        [1, 0, 0, 2, 1, 0, 2, 1] + [0] * 3 + [2, 2, 1] + [0] * 7,
-    "average_starting_ages":
-        [2, 10, 20, 30, 40]
-}
-madanapalle["vaccinated_array"] = \
-    np.array(madanapalle["vaccinated"])
-madanapalle["vaccinated_array"].shape = \
+data.update(
+    {
+        "madanapalle": {
+            "vaccinated": [0] * 10 + [1, 0, 0, 0, 1, 1, 2, 2] + [0] * 3 + [0] * 11 + [1, 3, 1, 1, 1, 0, 1, 0, 2, 0] +
+                          [1] + [0] * 9 + [1] + [0] * 4 + [1, 0, 1, 0, 1, 0] + [0] * 9 + [1] * 4 +
+                          [0, 0, 1, 0, 0, 1, 0, 0] + [0, 1] + [0] * 9 + [1, 1, 2] + [0] * 7,
+            "unvaccinated": [0] * 12 + [2, 0, 1, 0, 1] + [0] * 4 + [0] * 6 +
+                            [1, 0, 0, 1, 0, 1, 3, 0, 1, 2, 2, 0, 1, 1, 0] + [0] * 4 + [1, 0, 1] + [0] * 6 +
+                            [1, 1, 0, 1, 2] + [0] * 3 + [0] * 6 + [2, 1, 0, 0] + [1] * 3 + [4, 1] + [0] * 6 +
+                            [1, 0, 0, 2, 1, 0, 2, 1] + [0] * 3 + [2, 2, 1] + [0] * 7,
+            "average_starting_ages": [2, 10, 20, 30, 40]
+        }
+    }
+)
+data["madanapalle"]["vaccinated_array"] = \
+    np.array(data["madanapalle"]["vaccinated"])
+data["madanapalle"]["vaccinated_array"].shape = \
     (21, 5)
-madanapalle["vaccinated_cases"] = \
+data["madanapalle"]["vaccinated_cases"] = \
     pd.DataFrame(
-        madanapalle["vaccinated_array"],
-        columns=madanapalle["average_starting_ages"],
+        data["madanapalle"]["vaccinated_array"],
+        columns=data["madanapalle"]["average_starting_ages"],
         index=list(range(1, 22))
     )
-madanapalle["unvaccinated_array"] = \
-    np.array(madanapalle["unvaccinated"])
-madanapalle["unvaccinated_array"].shape = \
+data["madanapalle"]["unvaccinated_array"] = \
+    np.array(data["madanapalle"]["unvaccinated"])
+data["madanapalle"]["unvaccinated_array"].shape = \
     (21, 5)
-madanapalle["unvaccinated_cases"] = \
+data["madanapalle"]["unvaccinated_cases"] = \
     pd.DataFrame(
-        madanapalle["unvaccinated_array"],
-        columns=madanapalle["average_starting_ages"],
+        data["madanapalle"]["unvaccinated_array"],
+        columns=data["madanapalle"]["average_starting_ages"],
         index=list(range(1, 22))
     )
 
@@ -149,11 +153,11 @@ axes = {}
 axes["saskatchewan"] = \
     reactivation_graph.add_subplot(241, xlim=(0, x_limit), ylim=(0, y_limit))
 axes["saskatchewan"].scatter(
-    saskatchewan["times"], saskatchewan["times"], s=[marker_enlargement * i for i in saskatchewan["vaccinated"]],
+    data["saskatchewan"]["times"], data["saskatchewan"]["times"], s=[marker_enlargement * i for i in data["saskatchewan"]["vaccinated"]],
     color=vaccinated_colour, alpha=0.5
 )
 axes["saskatchewan"].scatter(
-    saskatchewan["times"], saskatchewan["times"], s=[marker_enlargement * i for i in saskatchewan["unvaccinated"]],
+    data["saskatchewan"]["times"], data["saskatchewan"]["times"], s=[marker_enlargement * i for i in data["saskatchewan"]["unvaccinated"]],
     color=unvaccinated_colour, alpha=0.5
 )
 axes["saskatchewan"].set_title("Saskatchewan\nnative infants", fontsize=title_fontsize)
@@ -161,11 +165,11 @@ axes["saskatchewan"].set_title("Saskatchewan\nnative infants", fontsize=title_fo
 # Chicago hospital-delivered infants plot
 axes["rosenthal"] = reactivation_graph.add_subplot(242, xlim=(0, x_limit), ylim=(0, y_limit))
 axes["rosenthal"].scatter(
-    rosenthal["times"], rosenthal["times"], s=[marker_enlargement * i for i in rosenthal["vaccinated"]],
+    data["chicago_hosp_delivered"]["times"], data["chicago_hosp_delivered"]["times"], s=[marker_enlargement * i for i in data["chicago_hosp_delivered"]["vaccinated"]],
     color=vaccinated_colour, alpha=0.5
 )
 axes["rosenthal"].scatter(
-    rosenthal["times"], rosenthal["times"], s=[marker_enlargement * i for i in rosenthal["unvaccinated"]],
+    data["chicago_hosp_delivered"]["times"], data["chicago_hosp_delivered"]["times"], s=[marker_enlargement * i for i in data["chicago_hosp_delivered"]["unvaccinated"]],
     color=unvaccinated_colour, alpha=0.5
 )
 axes["rosenthal"].set_title("Chicago, hospital-\ndelivered infants", fontsize=title_fontsize)
@@ -174,25 +178,25 @@ axes["rosenthal"].set_title("Chicago, hospital-\ndelivered infants", fontsize=ti
 marker_enlargement = 20.0
 axes["english_cities"] = reactivation_graph.add_subplot(243, xlim=(0, x_limit), ylim=(0, y_limit))
 axes["english_cities"].scatter(
-    english_cities["times"], [i + english_cities_assumed_age for i in english_cities["times"]],
+    data["english_cities"]["times"], [i + english_cities_assumed_age for i in data["english_cities"]["times"]],
     color=vaccinated_colour, alpha=0.5,
-    s=[marker_enlargement * i for i in english_cities["vaccinated"]]
+    s=[marker_enlargement * i for i in data["english_cities"]["vaccinated"]]
 )
 axes["english_cities"].scatter(
-    english_cities["times"], [i + english_cities_assumed_age for i in english_cities["times"]],
+    data["english_cities"]["times"], [i + english_cities_assumed_age for i in data["english_cities"]["times"]],
     color=unvaccinated_colour, alpha=0.5,
-    s=[marker_enlargement * i for i in english_cities["unvaccinated"]]
+    s=[marker_enlargement * i for i in data["english_cities"]["unvaccinated"]]
 )
 axes["english_cities"].set_title("English cities", fontsize=title_fontsize)
 
 # Chicago nursing students plot
 axes["chicago_nursing"] = reactivation_graph.add_subplot(244, xlim=(0, x_limit), ylim=(0, y_limit))
 axes["chicago_nursing"].scatter(
-    chicago_nursing["vaccinated"], [i + chicago_nursing_assumed_age for i in chicago_nursing["vaccinated"]],
+    data["chicago_nursing"]["vaccinated"], [i + chicago_nursing_assumed_age for i in data["chicago_nursing"]["vaccinated"]],
     color=vaccinated_colour, alpha=0.5, s=1e2
 )
 axes["chicago_nursing"].scatter(
-    chicago_nursing["unvaccinated"], [i + chicago_nursing_assumed_age for i in chicago_nursing["unvaccinated"]],
+    data["chicago_nursing"]["unvaccinated"], [i + chicago_nursing_assumed_age for i in data["chicago_nursing"]["unvaccinated"]],
     color=unvaccinated_colour, alpha=0.5, s=1e2
 )
 axes["chicago_nursing"].set_title("Chicago,\nnursing students", fontsize=title_fontsize)
@@ -200,11 +204,11 @@ axes["chicago_nursing"].set_title("Chicago,\nnursing students", fontsize=title_f
 # Lincoln State School plot
 axes["lincoln"] = reactivation_graph.add_subplot(234, xlim=(0, x_limit), ylim=(0, y_limit))
 axes["lincoln"].scatter(
-    lincoln["durations_years"][:12], lincoln_ages[:12], marker='o', linewidth=0.0, alpha=0.5,
+    data["lincoln"]["durations_years"][:12], lincoln_ages[:12], marker='o', linewidth=0.0, alpha=0.5,
     color=vaccinated_colour, s=1e2
 )
 axes["lincoln"].scatter(
-    lincoln["durations_years"][12:], lincoln_ages[12:], marker='o', linewidth=0.0, alpha=0.5,
+    data["lincoln"]["durations_years"][12:], lincoln_ages[12:], marker='o', linewidth=0.0, alpha=0.5,
     color=unvaccinated_colour, s=1e2
 )
 axes["lincoln"].set_title("Lincoln State School", fontsize=title_fontsize)
@@ -212,15 +216,15 @@ axes["lincoln"].set_title("Lincoln State School", fontsize=title_fontsize)
 # Madanapalle plot
 marker_enlargement = 1e2
 axes["madanapalle"] = reactivation_graph.add_subplot(235, title="Madanapalle", xlim=(0, x_limit), ylim=(0, y_limit))
-for age_group in madanapalle["average_starting_ages"]:
+for age_group in data["madanapalle"]["average_starting_ages"]:
     axes["madanapalle"].scatter(
-        madanapalle["vaccinated_cases"].index.values, madanapalle["vaccinated_cases"].index.values + age_group,
-        marker="o", s=marker_enlargement * madanapalle["vaccinated_cases"][age_group],
+        data["madanapalle"]["vaccinated_cases"].index.values, data["madanapalle"]["vaccinated_cases"].index.values + age_group,
+        marker="o", s=marker_enlargement * data["madanapalle"]["vaccinated_cases"][age_group],
         color=vaccinated_colour, alpha=0.5
     )
     axes["madanapalle"].scatter(
-        madanapalle["unvaccinated_cases"].index.values, madanapalle["unvaccinated_cases"].index.values + age_group,
-        marker="o", s=marker_enlargement * madanapalle["unvaccinated_cases"][age_group], color=unvaccinated_colour,
+        data["madanapalle"]["unvaccinated_cases"].index.values, data["madanapalle"]["unvaccinated_cases"].index.values + age_group,
+        marker="o", s=marker_enlargement * data["madanapalle"]["unvaccinated_cases"][age_group], color=unvaccinated_colour,
         alpha=0.5
     )
 axes["madanapalle"].set_title("Madanapalle", fontsize=title_fontsize)
