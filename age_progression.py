@@ -108,7 +108,7 @@ data_arrays["madanapalle"][:, 0] = madanapalle_ages
 data_arrays["madanapalle"][:, 1] = [0] + duplicate_list_values(madanapalle_numbers) + [0]
 
 # rand mines
-arbitrary_ages = np.linspace(-20.0, 100.0, 1e2)
+arbitrary_ages = np.linspace(-20.0, 100.0, 100)
 data_arrays["rand"] = np.zeros((len(arbitrary_ages), 2))
 data_arrays["rand"][:, 0] = arbitrary_ages
 data_arrays["rand"][:, 1] = normalise_to_upper_value(norm.pdf(arbitrary_ages, 30.3, 10.3), upper_point_of_patch)
@@ -235,7 +235,25 @@ def plot_age_distribution():
     )
     age_distribution_graph.savefig(file_name, dpi=500, bbox_inches="tight")
 
-plot_age_distribution()
+
+def plot_age_distribution_single_panel(fontsize):
+    single_axis = age_distribution_graph.add_subplot(111)
+    names = ["native american", "puerto rico", "haiti", "muscogee-russell", "chengalpattu", "madanapalle"]
+    for n_name, name in enumerate(names):
+        single_axis.plot(data_arrays[name][:, 0], data_arrays[name][:, 1], linewidth=2)
+        for tick in single_axis.xaxis.get_major_ticks():
+            tick.label.set_fontsize(fontsize)
+    single_axis.set_yticks([])
+    single_axis.set_ylim([0., 0.95])
+    single_axis.set_xlabel("age", fontsize=fontsize)
+    single_axis.set_ylabel("normalised proportion", fontsize=fontsize)
+    single_axis.legend(labels=names)
+
+    file_name = os.path.join(figure_folder, "age_distribution_single_panel.jpg")
+    age_distribution_graph.savefig(file_name, dpi=500, bbox_inches="tight")
+
+
+plot_age_distribution_single_panel(12)
 
 # scratch pad for estimating parameters to trapezoidal patch to approximate ages of georgia school study
 # georgia_ages = list(range(6, 18))
