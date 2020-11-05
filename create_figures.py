@@ -141,9 +141,9 @@ plotting
 plt.style.use("ggplot")
 
 
-def add_saskatchewan_plot(reactivation_graph, data, marker_enlargement, panel_number):
+def add_saskatchewan_plot(reactivation_graph, data, marker_enlargement, panel_number, x_lim, y_lim, title_size):
 
-    axis = reactivation_graph.add_subplot(panel_number, xlim=(0, x_limit), ylim=(0, y_limit))
+    axis = reactivation_graph.add_subplot(panel_number, xlim=(0, x_lim), ylim=(0, y_lim))
     axis.scatter(
         data["times"], data["times"],
         s=[marker_enlargement * i for i in data["vaccinated"]],
@@ -154,14 +154,13 @@ def add_saskatchewan_plot(reactivation_graph, data, marker_enlargement, panel_nu
         s=[marker_enlargement * i for i in data["unvaccinated"]],
         color=unvaccinated_colour, alpha=0.5
     )
-    axis.set_title("Saskatchewan\nnative infants", fontsize=title_fontsize)
+    axis.set_title("Saskatchewan\nnative infants", fontsize=title_size)
     return axis
 
 
-def add_chicago_hospital_plot(reactivation_graph, data, marker_enlargement, panel_number):
+def add_chicago_hospital_plot(reactivation_graph, data, marker_enlargement, panel_number, x_lim, y_lim, title_size):
 
-    # Chicago hospital-delivered infants plot
-    axis = reactivation_graph.add_subplot(panel_number, xlim=(0, x_limit), ylim=(0, y_limit))
+    axis = reactivation_graph.add_subplot(panel_number, xlim=(0, x_lim), ylim=(0, y_lim))
     axis.scatter(
         data["times"], data["times"],
         s=[marker_enlargement * i for i in data["vaccinated"]],
@@ -172,13 +171,13 @@ def add_chicago_hospital_plot(reactivation_graph, data, marker_enlargement, pane
         s=[marker_enlargement * i for i in data["unvaccinated"]],
         color=unvaccinated_colour, alpha=0.5
     )
-    axis.set_title("Chicago, hospital-\ndelivered infants", fontsize=title_fontsize)
+    axis.set_title("Chicago, hospital-\ndelivered infants", fontsize=title_size)
     return axis
 
 
-def add_english_cities_plot(reactivation_graph, data, marker_enlargement, panel_number):
+def add_english_cities_plot(reactivation_graph, data, marker_enlargement, panel_number, x_lim, y_lim, title_size):
 
-    axis = reactivation_graph.add_subplot(panel_number, xlim=(0, x_limit), ylim=(0, y_limit))
+    axis = reactivation_graph.add_subplot(panel_number, xlim=(0, x_lim), ylim=(0, y_lim))
     axis.scatter(
         data["times"], [i + english_cities_assumed_age for i in data["times"]],
         color=vaccinated_colour, alpha=0.5,
@@ -189,13 +188,13 @@ def add_english_cities_plot(reactivation_graph, data, marker_enlargement, panel_
         color=unvaccinated_colour, alpha=0.5,
         s=[marker_enlargement * i for i in data["unvaccinated"]]
     )
-    axis.set_title("English cities", fontsize=title_fontsize)
+    axis.set_title("English cities", fontsize=title_size)
     return axis
 
 
-def add_chicago_nursing_plot(reactivation_graph, data, panel_number):
+def add_chicago_nursing_plot(reactivation_graph, data, panel_number, x_lim, y_lim, title_size):
 
-    axis = reactivation_graph.add_subplot(panel_number, xlim=(0, x_limit), ylim=(0, y_limit))
+    axis = reactivation_graph.add_subplot(panel_number, xlim=(0, x_lim), ylim=(0, y_lim))
     axis.scatter(
         data["vaccinated"], [i + chicago_nursing_assumed_age for i in data["vaccinated"]],
         color=vaccinated_colour, alpha=0.5, s=1e2
@@ -204,13 +203,13 @@ def add_chicago_nursing_plot(reactivation_graph, data, panel_number):
         data["unvaccinated"], [i + chicago_nursing_assumed_age for i in data["unvaccinated"]],
         color=unvaccinated_colour, alpha=0.5, s=1e2
     )
-    axis.set_title("Chicago,\nnursing students", fontsize=title_fontsize)
+    axis.set_title("Chicago,\nnursing students", fontsize=title_size)
     return axis
 
 
-def add_lincoln_plot(reactivation_graph, data, panel_number):
+def add_lincoln_plot(reactivation_graph, data, panel_number, x_lim, y_lim, title_size):
 
-    axis = reactivation_graph.add_subplot(panel_number, xlim=(0, x_limit), ylim=(0, y_limit))
+    axis = reactivation_graph.add_subplot(panel_number, xlim=(0, x_lim), ylim=(0, y_lim))
     axis.scatter(
         data["durations_years"][:12], lincoln_ages[:12], marker='o', linewidth=0.0, alpha=0.5,
         color=vaccinated_colour, s=1e2
@@ -219,13 +218,13 @@ def add_lincoln_plot(reactivation_graph, data, panel_number):
         data["durations_years"][12:], lincoln_ages[12:], marker='o', linewidth=0.0, alpha=0.5,
         color=unvaccinated_colour, s=1e2
     )
-    axis.set_title("Lincoln State School", fontsize=title_fontsize)
+    axis.set_title("Lincoln State School", fontsize=title_size)
     return axis
 
 
-def add_madanapalle_plot(reactivation_graph, data, panel_number, marker_enlargement):
+def add_madanapalle_plot(reactivation_graph, data, panel_number, marker_enlargement, x_lim, y_lim, title_size):
 
-    axis = reactivation_graph.add_subplot(panel_number, title="Madanapalle", xlim=(0, x_limit), ylim=(0, y_limit))
+    axis = reactivation_graph.add_subplot(panel_number, title="Madanapalle", xlim=(0, x_lim), ylim=(0, y_lim))
     for age_group in data["average_starting_ages"]:
         axis.scatter(
             data["vaccinated_cases"].index.values, data["vaccinated_cases"].index.values + age_group,
@@ -237,14 +236,14 @@ def add_madanapalle_plot(reactivation_graph, data, panel_number, marker_enlargem
             s=marker_enlargement * data["unvaccinated_cases"][age_group],
             color=unvaccinated_colour, alpha=0.5, marker="o"
         )
-    axis.set_title("Madanapalle", fontsize=title_fontsize)
+    axis.set_title("Madanapalle", fontsize=title_size)
     return axis
 
 
-def add_chengalpattu_plot(reactivation_graph, data, age_groups, panel_number, marker_enlargement):
+def add_chengalpattu_plot(reactivation_graph, data, age_groups, panel_number, marker_enlargement, x_lim, y_lim, title_size):
 
     age_groups[-1] = 65.  # arbitrary y-position for the last age group on the vertical axis, who are aged 60+
-    axis = reactivation_graph.add_subplot(panel_number, xlim=(0, x_limit), ylim=(0, y_limit))
+    axis = reactivation_graph.add_subplot(panel_number, xlim=(0, x_lim), ylim=(0, y_lim))
     for i_age in range(len(data)):
         axis.scatter(
             follow_up_times, [age_groups[i_age]] * len(follow_up_times),
@@ -256,7 +255,7 @@ def add_chengalpattu_plot(reactivation_graph, data, age_groups, panel_number, ma
             s=[marker_enlargement * i for i in data.iloc[i_age, len(follow_up_times): len(follow_up_times) * 2]],
             color=unvaccinated_colour, alpha=0.5
         )
-    axis.set_title("Chengalpattu", fontsize=title_fontsize)
+    axis.set_title("Chengalpattu", fontsize=title_size)
     return axis
 
 
@@ -264,18 +263,34 @@ def plot_seven_panels(data, x_limit, y_limit, title_fontsize, vaccinated_colour,
 
     reactivation_graph = plt.figure()
     axes = {}
-    marker_enlargement = 1e2
-
-    axes["saskatchewan"] = add_saskatchewan_plot(reactivation_graph, data["saskatchewan"], marker_enlargement, 241)
-    axes["rosenthal"] = add_chicago_hospital_plot(reactivation_graph, data["chicago_hosp_delivered"], marker_enlargement, 242)
-    marker_enlargement = 20.
-    axes["english_cities"] = add_chicago_hospital_plot(reactivation_graph, data["english_cities"], marker_enlargement, 243)
-    axes["chicago_nursing"] = add_chicago_nursing_plot(reactivation_graph, data["chicago_nursing"], 244)
-    axes["lincoln"] = add_lincoln_plot(reactivation_graph, data["lincoln"], 234)
-    marker_enlargement = 1e2
-    axes["madanapalle"] = add_madanapalle_plot(reactivation_graph, data["madanapalle"], 235, marker_enlargement)
-    marker_enlargement = 3.5
-    axes["chengalpattu"] = add_chengalpattu_plot(reactivation_graph, chengalpattu_data, chengalpattu_age_groups, 236, marker_enlargement)
+    axes["saskatchewan"] = \
+        add_saskatchewan_plot(
+            reactivation_graph, data["saskatchewan"], 1e2, 241, x_limit, y_limit, title_fontsize
+        )
+    axes["rosenthal"] = \
+        add_chicago_hospital_plot(
+            reactivation_graph, data["chicago_hosp_delivered"], 1e2, 242, x_limit, y_limit, title_fontsize
+        )
+    axes["english_cities"] = \
+        add_chicago_hospital_plot(
+            reactivation_graph, data["english_cities"], 20., 243, x_limit, y_limit, title_fontsize
+        )
+    axes["chicago_nursing"] = \
+        add_chicago_nursing_plot(
+            reactivation_graph, data["chicago_nursing"], 244, x_limit, y_limit, title_fontsize
+        )
+    axes["lincoln"] = \
+        add_lincoln_plot(
+            reactivation_graph, data["lincoln"], 234, x_limit, y_limit, title_fontsize
+        )
+    axes["madanapalle"] = \
+        add_madanapalle_plot(
+            reactivation_graph, data["madanapalle"], 235, 1e2, x_limit, y_limit, title_fontsize
+        )
+    axes["chengalpattu"] = \
+        add_chengalpattu_plot(
+            reactivation_graph, chengalpattu_data, chengalpattu_age_groups, 236, 3.5, x_limit, y_limit, title_fontsize
+        )
 
     # label x-axis
     for i_ax, axis in enumerate(axes):
@@ -300,13 +315,22 @@ def plot_four_panels(data, x_limit, y_limit, title_fontsize, vaccinated_colour, 
     axes = {}
 
     # English cities plot
-    marker_enlargement = 20.0
-    axes["english_cities"] = add_chicago_hospital_plot(reactivation_graph, data["english_cities"], marker_enlargement, 221)
-    axes["lincoln"] = add_lincoln_plot(reactivation_graph, data["lincoln"], 222)
-    marker_enlargement = 1e2
-    axes["madanapalle"] = add_madanapalle_plot(reactivation_graph, data["madanapalle"], 223, marker_enlargement)
-    marker_enlargement = 3.5
-    axes["chengalpattu"] = add_chengalpattu_plot(reactivation_graph, chengalpattu_data, chengalpattu_age_groups, 224, marker_enlargement)
+    axes["english_cities"] = \
+        add_chicago_hospital_plot(
+            reactivation_graph, data["english_cities"], 20.0, 221, x_limit, y_limit, title_fontsize
+        )
+    axes["lincoln"] = \
+        add_lincoln_plot(
+            reactivation_graph, data["lincoln"], 222, x_limit, y_limit, title_fontsize
+        )
+    axes["madanapalle"] = \
+        add_madanapalle_plot(
+            reactivation_graph, data["madanapalle"], 223, 1e2, x_limit, y_limit, title_fontsize
+        )
+    axes["chengalpattu"] = \
+        add_chengalpattu_plot(
+            reactivation_graph, chengalpattu_data, chengalpattu_age_groups, 224, 3.5, x_limit, y_limit, title_fontsize
+        )
 
     # label x-axis
     for i_ax, axis in enumerate(axes):
