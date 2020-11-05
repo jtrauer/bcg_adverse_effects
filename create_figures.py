@@ -138,133 +138,239 @@ chengalpattu_data.columns = [col.replace(".2", "_control") if ".2" in col else c
 plotting
 """
 
-# plotting parameters
-plt.style.use("ggplot")
-x_limit = 21.
-y_limit = 70.
-title_fontsize = 9.
-reactivation_graph = plt.figure()
-marker_enlargement = 1e2
-vaccinated_colour = "red"
-unvaccinated_colour = "blue"
-axes = {}
+def plot_seven_panels(data):
 
-# Saskatchewan plot
-axes["saskatchewan"] = \
-    reactivation_graph.add_subplot(241, xlim=(0, x_limit), ylim=(0, y_limit))
-axes["saskatchewan"].scatter(
-    data["saskatchewan"]["times"], data["saskatchewan"]["times"], s=[marker_enlargement * i for i in data["saskatchewan"]["vaccinated"]],
-    color=vaccinated_colour, alpha=0.5
-)
-axes["saskatchewan"].scatter(
-    data["saskatchewan"]["times"], data["saskatchewan"]["times"], s=[marker_enlargement * i for i in data["saskatchewan"]["unvaccinated"]],
-    color=unvaccinated_colour, alpha=0.5
-)
-axes["saskatchewan"].set_title("Saskatchewan\nnative infants", fontsize=title_fontsize)
+    # plotting parameters
+    plt.style.use("ggplot")
+    x_limit = 21.
+    y_limit = 70.
+    title_fontsize = 9.
+    reactivation_graph = plt.figure()
+    marker_enlargement = 1e2
+    vaccinated_colour = "red"
+    unvaccinated_colour = "blue"
+    axes = {}
 
-# Chicago hospital-delivered infants plot
-axes["rosenthal"] = reactivation_graph.add_subplot(242, xlim=(0, x_limit), ylim=(0, y_limit))
-axes["rosenthal"].scatter(
-    data["chicago_hosp_delivered"]["times"], data["chicago_hosp_delivered"]["times"], s=[marker_enlargement * i for i in data["chicago_hosp_delivered"]["vaccinated"]],
-    color=vaccinated_colour, alpha=0.5
-)
-axes["rosenthal"].scatter(
-    data["chicago_hosp_delivered"]["times"], data["chicago_hosp_delivered"]["times"], s=[marker_enlargement * i for i in data["chicago_hosp_delivered"]["unvaccinated"]],
-    color=unvaccinated_colour, alpha=0.5
-)
-axes["rosenthal"].set_title("Chicago, hospital-\ndelivered infants", fontsize=title_fontsize)
-
-# English cities plot
-marker_enlargement = 20.0
-axes["english_cities"] = reactivation_graph.add_subplot(243, xlim=(0, x_limit), ylim=(0, y_limit))
-axes["english_cities"].scatter(
-    data["english_cities"]["times"], [i + english_cities_assumed_age for i in data["english_cities"]["times"]],
-    color=vaccinated_colour, alpha=0.5,
-    s=[marker_enlargement * i for i in data["english_cities"]["vaccinated"]]
-)
-axes["english_cities"].scatter(
-    data["english_cities"]["times"], [i + english_cities_assumed_age for i in data["english_cities"]["times"]],
-    color=unvaccinated_colour, alpha=0.5,
-    s=[marker_enlargement * i for i in data["english_cities"]["unvaccinated"]]
-)
-axes["english_cities"].set_title("English cities", fontsize=title_fontsize)
-
-# Chicago nursing students plot
-axes["chicago_nursing"] = reactivation_graph.add_subplot(244, xlim=(0, x_limit), ylim=(0, y_limit))
-axes["chicago_nursing"].scatter(
-    data["chicago_nursing"]["vaccinated"], [i + chicago_nursing_assumed_age for i in data["chicago_nursing"]["vaccinated"]],
-    color=vaccinated_colour, alpha=0.5, s=1e2
-)
-axes["chicago_nursing"].scatter(
-    data["chicago_nursing"]["unvaccinated"], [i + chicago_nursing_assumed_age for i in data["chicago_nursing"]["unvaccinated"]],
-    color=unvaccinated_colour, alpha=0.5, s=1e2
-)
-axes["chicago_nursing"].set_title("Chicago,\nnursing students", fontsize=title_fontsize)
-
-# Lincoln State School plot
-axes["lincoln"] = reactivation_graph.add_subplot(234, xlim=(0, x_limit), ylim=(0, y_limit))
-axes["lincoln"].scatter(
-    data["lincoln"]["durations_years"][:12], lincoln_ages[:12], marker='o', linewidth=0.0, alpha=0.5,
-    color=vaccinated_colour, s=1e2
-)
-axes["lincoln"].scatter(
-    data["lincoln"]["durations_years"][12:], lincoln_ages[12:], marker='o', linewidth=0.0, alpha=0.5,
-    color=unvaccinated_colour, s=1e2
-)
-axes["lincoln"].set_title("Lincoln State School", fontsize=title_fontsize)
-
-# Madanapalle plot
-marker_enlargement = 1e2
-axes["madanapalle"] = reactivation_graph.add_subplot(235, title="Madanapalle", xlim=(0, x_limit), ylim=(0, y_limit))
-for age_group in data["madanapalle"]["average_starting_ages"]:
-    axes["madanapalle"].scatter(
-        data["madanapalle"]["vaccinated_cases"].index.values, data["madanapalle"]["vaccinated_cases"].index.values + age_group,
-        marker="o", s=marker_enlargement * data["madanapalle"]["vaccinated_cases"][age_group],
+    # Saskatchewan plot
+    axes["saskatchewan"] = \
+        reactivation_graph.add_subplot(241, xlim=(0, x_limit), ylim=(0, y_limit))
+    axes["saskatchewan"].scatter(
+        data["saskatchewan"]["times"], data["saskatchewan"]["times"], s=[marker_enlargement * i for i in data["saskatchewan"]["vaccinated"]],
         color=vaccinated_colour, alpha=0.5
     )
-    axes["madanapalle"].scatter(
-        data["madanapalle"]["unvaccinated_cases"].index.values, data["madanapalle"]["unvaccinated_cases"].index.values + age_group,
-        marker="o", s=marker_enlargement * data["madanapalle"]["unvaccinated_cases"][age_group], color=unvaccinated_colour,
-        alpha=0.5
+    axes["saskatchewan"].scatter(
+        data["saskatchewan"]["times"], data["saskatchewan"]["times"], s=[marker_enlargement * i for i in data["saskatchewan"]["unvaccinated"]],
+        color=unvaccinated_colour, alpha=0.5
     )
-axes["madanapalle"].set_title("Madanapalle", fontsize=title_fontsize)
+    axes["saskatchewan"].set_title("Saskatchewan\nnative infants", fontsize=title_fontsize)
 
-# Chengalpattu plot
-marker_enlargement = 3.5
-chengalpattu_age_groups[-1] = 65.  # arbitrary y-position for the last age group on the vertical axis, who are aged 60+
-axes["chengalpattu"] = reactivation_graph.add_subplot(236, xlim=(0, x_limit), ylim=(0, y_limit))
-for i_age in range(len(chengalpattu_data)):
-    axes["chengalpattu"].scatter(
-        follow_up_times,
-        [chengalpattu_age_groups[i_age]] * len(follow_up_times),
-        s=[marker_enlargement * i for
-           i in chengalpattu_data.iloc[i_age, :len(follow_up_times)]],
-        color=vaccinated_colour,
-        alpha=0.5
+    # Chicago hospital-delivered infants plot
+    axes["rosenthal"] = reactivation_graph.add_subplot(242, xlim=(0, x_limit), ylim=(0, y_limit))
+    axes["rosenthal"].scatter(
+        data["chicago_hosp_delivered"]["times"], data["chicago_hosp_delivered"]["times"], s=[marker_enlargement * i for i in data["chicago_hosp_delivered"]["vaccinated"]],
+        color=vaccinated_colour, alpha=0.5
     )
-    axes["chengalpattu"].scatter(
-        follow_up_times,
-        [chengalpattu_age_groups[i_age]] * len(follow_up_times),
-        s=[marker_enlargement * i for
-           i in chengalpattu_data.iloc[i_age, len(follow_up_times): len(follow_up_times) * 2]],
-        color=unvaccinated_colour,
-        alpha=0.5
+    axes["rosenthal"].scatter(
+        data["chicago_hosp_delivered"]["times"], data["chicago_hosp_delivered"]["times"], s=[marker_enlargement * i for i in data["chicago_hosp_delivered"]["unvaccinated"]],
+        color=unvaccinated_colour, alpha=0.5
     )
-axes["chengalpattu"].set_title("Chengalpattu", fontsize=title_fontsize)
+    axes["rosenthal"].set_title("Chicago, hospital-\ndelivered infants", fontsize=title_fontsize)
 
-# label x-axis
-for i_ax, axis in enumerate(axes):
-    xlabel_fontsize = 7 if i_ax < 4 else 7
-    axes[axis].set_xlabel("Years from vaccination", fontsize=xlabel_fontsize)
-    axes[axis].set_ylabel("Age at diagnosis", fontsize=7)
-    axes[axis].axes.set_xticks(range(0, 30, 10))
-    plt.setp(axes[axis].get_xticklabels(), fontsize=7)
-    plt.setp(axes[axis].get_yticklabels(), fontsize=7)
+    # English cities plot
+    marker_enlargement = 20.0
+    axes["english_cities"] = reactivation_graph.add_subplot(243, xlim=(0, x_limit), ylim=(0, y_limit))
+    axes["english_cities"].scatter(
+        data["english_cities"]["times"], [i + english_cities_assumed_age for i in data["english_cities"]["times"]],
+        color=vaccinated_colour, alpha=0.5,
+        s=[marker_enlargement * i for i in data["english_cities"]["vaccinated"]]
+    )
+    axes["english_cities"].scatter(
+        data["english_cities"]["times"], [i + english_cities_assumed_age for i in data["english_cities"]["times"]],
+        color=unvaccinated_colour, alpha=0.5,
+        s=[marker_enlargement * i for i in data["english_cities"]["unvaccinated"]]
+    )
+    axes["english_cities"].set_title("English cities", fontsize=title_fontsize)
 
-# save multi-panel plot
-plt.subplots_adjust(
-    wspace=0.45,
-    hspace=0.4
-)
-file_name = os.path.join(figure_folder, "reactivation.jpg")
+    # Chicago nursing students plot
+    axes["chicago_nursing"] = reactivation_graph.add_subplot(244, xlim=(0, x_limit), ylim=(0, y_limit))
+    axes["chicago_nursing"].scatter(
+        data["chicago_nursing"]["vaccinated"], [i + chicago_nursing_assumed_age for i in data["chicago_nursing"]["vaccinated"]],
+        color=vaccinated_colour, alpha=0.5, s=1e2
+    )
+    axes["chicago_nursing"].scatter(
+        data["chicago_nursing"]["unvaccinated"], [i + chicago_nursing_assumed_age for i in data["chicago_nursing"]["unvaccinated"]],
+        color=unvaccinated_colour, alpha=0.5, s=1e2
+    )
+    axes["chicago_nursing"].set_title("Chicago,\nnursing students", fontsize=title_fontsize)
+
+    # Lincoln State School plot
+    axes["lincoln"] = reactivation_graph.add_subplot(234, xlim=(0, x_limit), ylim=(0, y_limit))
+    axes["lincoln"].scatter(
+        data["lincoln"]["durations_years"][:12], lincoln_ages[:12], marker='o', linewidth=0.0, alpha=0.5,
+        color=vaccinated_colour, s=1e2
+    )
+    axes["lincoln"].scatter(
+        data["lincoln"]["durations_years"][12:], lincoln_ages[12:], marker='o', linewidth=0.0, alpha=0.5,
+        color=unvaccinated_colour, s=1e2
+    )
+    axes["lincoln"].set_title("Lincoln State School", fontsize=title_fontsize)
+
+    # Madanapalle plot
+    marker_enlargement = 1e2
+    axes["madanapalle"] = reactivation_graph.add_subplot(235, title="Madanapalle", xlim=(0, x_limit), ylim=(0, y_limit))
+    for age_group in data["madanapalle"]["average_starting_ages"]:
+        axes["madanapalle"].scatter(
+            data["madanapalle"]["vaccinated_cases"].index.values, data["madanapalle"]["vaccinated_cases"].index.values + age_group,
+            marker="o", s=marker_enlargement * data["madanapalle"]["vaccinated_cases"][age_group],
+            color=vaccinated_colour, alpha=0.5
+        )
+        axes["madanapalle"].scatter(
+            data["madanapalle"]["unvaccinated_cases"].index.values, data["madanapalle"]["unvaccinated_cases"].index.values + age_group,
+            marker="o", s=marker_enlargement * data["madanapalle"]["unvaccinated_cases"][age_group], color=unvaccinated_colour,
+            alpha=0.5
+        )
+    axes["madanapalle"].set_title("Madanapalle", fontsize=title_fontsize)
+
+    # Chengalpattu plot
+    marker_enlargement = 3.5
+    chengalpattu_age_groups[-1] = 65.  # arbitrary y-position for the last age group on the vertical axis, who are aged 60+
+    axes["chengalpattu"] = reactivation_graph.add_subplot(236, xlim=(0, x_limit), ylim=(0, y_limit))
+    for i_age in range(len(chengalpattu_data)):
+        axes["chengalpattu"].scatter(
+            follow_up_times,
+            [chengalpattu_age_groups[i_age]] * len(follow_up_times),
+            s=[marker_enlargement * i for
+               i in chengalpattu_data.iloc[i_age, :len(follow_up_times)]],
+            color=vaccinated_colour,
+            alpha=0.5
+        )
+        axes["chengalpattu"].scatter(
+            follow_up_times,
+            [chengalpattu_age_groups[i_age]] * len(follow_up_times),
+            s=[marker_enlargement * i for
+               i in chengalpattu_data.iloc[i_age, len(follow_up_times): len(follow_up_times) * 2]],
+            color=unvaccinated_colour,
+            alpha=0.5
+        )
+    axes["chengalpattu"].set_title("Chengalpattu", fontsize=title_fontsize)
+
+    # label x-axis
+    for i_ax, axis in enumerate(axes):
+        xlabel_fontsize = 7 if i_ax < 4 else 7
+        axes[axis].set_xlabel("Years from vaccination", fontsize=xlabel_fontsize)
+        axes[axis].set_ylabel("Age at diagnosis", fontsize=7)
+        axes[axis].axes.set_xticks(range(0, 30, 10))
+        plt.setp(axes[axis].get_xticklabels(), fontsize=7)
+        plt.setp(axes[axis].get_yticklabels(), fontsize=7)
+
+    # save multi-panel plot
+    plt.subplots_adjust(
+        wspace=0.45,
+        hspace=0.4
+    )
+    return reactivation_graph
+
+
+def plot_four_panels(data):
+
+    # plotting parameters
+    plt.style.use("ggplot")
+    x_limit = 21.
+    y_limit = 70.
+    title_fontsize = 9.
+    reactivation_graph = plt.figure()
+    vaccinated_colour = "red"
+    unvaccinated_colour = "blue"
+    axes = {}
+
+    # English cities plot
+    marker_enlargement = 20.0
+    axes["english_cities"] = reactivation_graph.add_subplot(221, xlim=(0, x_limit), ylim=(0, y_limit))
+    axes["english_cities"].scatter(
+        data["english_cities"]["times"], [i + english_cities_assumed_age for i in data["english_cities"]["times"]],
+        color=vaccinated_colour, alpha=0.5,
+        s=[marker_enlargement * i for i in data["english_cities"]["vaccinated"]]
+    )
+    axes["english_cities"].scatter(
+        data["english_cities"]["times"], [i + english_cities_assumed_age for i in data["english_cities"]["times"]],
+        color=unvaccinated_colour, alpha=0.5,
+        s=[marker_enlargement * i for i in data["english_cities"]["unvaccinated"]]
+    )
+    axes["english_cities"].set_title("English cities", fontsize=title_fontsize)
+
+    # Lincoln State School plot
+    axes["lincoln"] = reactivation_graph.add_subplot(222, xlim=(0, x_limit), ylim=(0, y_limit))
+    axes["lincoln"].scatter(
+        data["lincoln"]["durations_years"][:12], lincoln_ages[:12], marker='o', linewidth=0.0, alpha=0.5,
+        color=vaccinated_colour, s=1e2
+    )
+    axes["lincoln"].scatter(
+        data["lincoln"]["durations_years"][12:], lincoln_ages[12:], marker='o', linewidth=0.0, alpha=0.5,
+        color=unvaccinated_colour, s=1e2
+    )
+    axes["lincoln"].set_title("Lincoln State School", fontsize=title_fontsize)
+
+    # Madanapalle plot
+    marker_enlargement = 1e2
+    axes["madanapalle"] = reactivation_graph.add_subplot(223, title="Madanapalle", xlim=(0, x_limit), ylim=(0, y_limit))
+    for age_group in data["madanapalle"]["average_starting_ages"]:
+        axes["madanapalle"].scatter(
+            data["madanapalle"]["vaccinated_cases"].index.values, data["madanapalle"]["vaccinated_cases"].index.values + age_group,
+            marker="o", s=marker_enlargement * data["madanapalle"]["vaccinated_cases"][age_group],
+            color=vaccinated_colour, alpha=0.5
+        )
+        axes["madanapalle"].scatter(
+            data["madanapalle"]["unvaccinated_cases"].index.values, data["madanapalle"]["unvaccinated_cases"].index.values + age_group,
+            marker="o", s=marker_enlargement * data["madanapalle"]["unvaccinated_cases"][age_group], color=unvaccinated_colour,
+            alpha=0.5
+        )
+    axes["madanapalle"].set_title("Madanapalle", fontsize=title_fontsize)
+
+    # Chengalpattu plot
+    marker_enlargement = 3.5
+    chengalpattu_age_groups[-1] = 65.  # arbitrary y-position for the last age group on the vertical axis, who are aged 60+
+    axes["chengalpattu"] = reactivation_graph.add_subplot(224, xlim=(0, x_limit), ylim=(0, y_limit))
+    for i_age in range(len(chengalpattu_data)):
+        axes["chengalpattu"].scatter(
+            follow_up_times,
+            [chengalpattu_age_groups[i_age]] * len(follow_up_times),
+            s=[marker_enlargement * i for
+               i in chengalpattu_data.iloc[i_age, :len(follow_up_times)]],
+            color=vaccinated_colour,
+            alpha=0.5
+        )
+        axes["chengalpattu"].scatter(
+            follow_up_times,
+            [chengalpattu_age_groups[i_age]] * len(follow_up_times),
+            s=[marker_enlargement * i for
+               i in chengalpattu_data.iloc[i_age, len(follow_up_times): len(follow_up_times) * 2]],
+            color=unvaccinated_colour,
+            alpha=0.5
+        )
+    axes["chengalpattu"].set_title("Chengalpattu", fontsize=title_fontsize)
+
+    # label x-axis
+    for i_ax, axis in enumerate(axes):
+        xlabel_fontsize = 7 if i_ax < 4 else 7
+        axes[axis].set_xlabel("Years from vaccination", fontsize=xlabel_fontsize)
+        axes[axis].set_ylabel("Age at diagnosis", fontsize=7)
+        axes[axis].axes.set_xticks(range(0, 30, 10))
+        plt.setp(axes[axis].get_xticklabels(), fontsize=7)
+        plt.setp(axes[axis].get_yticklabels(), fontsize=7)
+
+    # save multi-panel plot
+    plt.subplots_adjust(
+        wspace=0.45,
+        hspace=0.4
+    )
+    return reactivation_graph
+
+
+file_name = os.path.join(figure_folder, "reactivation_four_panels.jpg")
+reactivation_graph = plot_four_panels(data)
 reactivation_graph.savefig(file_name, dpi=500, bbox_inches="tight")
+
+file_name = os.path.join(figure_folder, "reactivation_seven_panels.jpg")
+reactivation_graph = plot_seven_panels(data)
+reactivation_graph.savefig(file_name, dpi=500, bbox_inches="tight")
+
