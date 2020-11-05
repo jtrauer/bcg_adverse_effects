@@ -158,6 +158,71 @@ def add_saskatchewan_plot(reactivation_graph, data, marker_enlargement, panel_nu
     return axis
 
 
+def add_chicago_hospital_plot(reactivation_graph, data, marker_enlargement, panel_number):
+
+    # Chicago hospital-delivered infants plot
+    axis = reactivation_graph.add_subplot(panel_number, xlim=(0, x_limit), ylim=(0, y_limit))
+    axis.scatter(
+        data["times"], data["times"],
+        s=[marker_enlargement * i for i in data["vaccinated"]],
+        color=vaccinated_colour, alpha=0.5
+    )
+    axis.scatter(
+        data["times"], data["times"],
+        s=[marker_enlargement * i for i in data["unvaccinated"]],
+        color=unvaccinated_colour, alpha=0.5
+    )
+    axis.set_title("Chicago, hospital-\ndelivered infants", fontsize=title_fontsize)
+    return axis
+
+
+def add_english_cities_plot(reactivation_graph, data, marker_enlargement, panel_number):
+
+    axis = reactivation_graph.add_subplot(panel_number, xlim=(0, x_limit), ylim=(0, y_limit))
+    axis.scatter(
+        data["times"], [i + english_cities_assumed_age for i in data["times"]],
+        color=vaccinated_colour, alpha=0.5,
+        s=[marker_enlargement * i for i in data["vaccinated"]]
+    )
+    axis.scatter(
+        data["times"], [i + english_cities_assumed_age for i in data["times"]],
+        color=unvaccinated_colour, alpha=0.5,
+        s=[marker_enlargement * i for i in data["unvaccinated"]]
+    )
+    axis.set_title("English cities", fontsize=title_fontsize)
+    return axis
+
+
+def add_chicago_nursing_plot(reactivation_graph, data, panel_number):
+
+    axis = reactivation_graph.add_subplot(panel_number, xlim=(0, x_limit), ylim=(0, y_limit))
+    axis.scatter(
+        data["vaccinated"], [i + chicago_nursing_assumed_age for i in data["vaccinated"]],
+        color=vaccinated_colour, alpha=0.5, s=1e2
+    )
+    axis.scatter(
+        data["unvaccinated"], [i + chicago_nursing_assumed_age for i in data["unvaccinated"]],
+        color=unvaccinated_colour, alpha=0.5, s=1e2
+    )
+    axis.set_title("Chicago,\nnursing students", fontsize=title_fontsize)
+    return axis
+
+
+def add_lincoln_plot(reactivation_graph, data, panel_number):
+
+    axis = reactivation_graph.add_subplot(panel_number, xlim=(0, x_limit), ylim=(0, y_limit))
+    axis.scatter(
+        data["durations_years"][:12], lincoln_ages[:12], marker='o', linewidth=0.0, alpha=0.5,
+        color=vaccinated_colour, s=1e2
+    )
+    axis.scatter(
+        data["durations_years"][12:], lincoln_ages[12:], marker='o', linewidth=0.0, alpha=0.5,
+        color=unvaccinated_colour, s=1e2
+    )
+    axis.set_title("Lincoln State School", fontsize=title_fontsize)
+    return axis
+
+
 def plot_seven_panels(data, x_limit, y_limit, title_fontsize, vaccinated_colour, unvaccinated_colour):
 
     reactivation_graph = plt.figure()
@@ -165,57 +230,14 @@ def plot_seven_panels(data, x_limit, y_limit, title_fontsize, vaccinated_colour,
     marker_enlargement = 1e2
 
     axes["saskatchewan"] = add_saskatchewan_plot(reactivation_graph, data["saskatchewan"], marker_enlargement, 241)
-
-    # Chicago hospital-delivered infants plot
-    axes["rosenthal"] = reactivation_graph.add_subplot(242, xlim=(0, x_limit), ylim=(0, y_limit))
-    axes["rosenthal"].scatter(
-        data["chicago_hosp_delivered"]["times"], data["chicago_hosp_delivered"]["times"], s=[marker_enlargement * i for i in data["chicago_hosp_delivered"]["vaccinated"]],
-        color=vaccinated_colour, alpha=0.5
-    )
-    axes["rosenthal"].scatter(
-        data["chicago_hosp_delivered"]["times"], data["chicago_hosp_delivered"]["times"], s=[marker_enlargement * i for i in data["chicago_hosp_delivered"]["unvaccinated"]],
-        color=unvaccinated_colour, alpha=0.5
-    )
-    axes["rosenthal"].set_title("Chicago, hospital-\ndelivered infants", fontsize=title_fontsize)
-
-    # English cities plot
-    marker_enlargement = 20.0
-    axes["english_cities"] = reactivation_graph.add_subplot(243, xlim=(0, x_limit), ylim=(0, y_limit))
-    axes["english_cities"].scatter(
-        data["english_cities"]["times"], [i + english_cities_assumed_age for i in data["english_cities"]["times"]],
-        color=vaccinated_colour, alpha=0.5,
-        s=[marker_enlargement * i for i in data["english_cities"]["vaccinated"]]
-    )
-    axes["english_cities"].scatter(
-        data["english_cities"]["times"], [i + english_cities_assumed_age for i in data["english_cities"]["times"]],
-        color=unvaccinated_colour, alpha=0.5,
-        s=[marker_enlargement * i for i in data["english_cities"]["unvaccinated"]]
-    )
-    axes["english_cities"].set_title("English cities", fontsize=title_fontsize)
-
-    # Chicago nursing students plot
-    axes["chicago_nursing"] = reactivation_graph.add_subplot(244, xlim=(0, x_limit), ylim=(0, y_limit))
-    axes["chicago_nursing"].scatter(
-        data["chicago_nursing"]["vaccinated"], [i + chicago_nursing_assumed_age for i in data["chicago_nursing"]["vaccinated"]],
-        color=vaccinated_colour, alpha=0.5, s=1e2
-    )
-    axes["chicago_nursing"].scatter(
-        data["chicago_nursing"]["unvaccinated"], [i + chicago_nursing_assumed_age for i in data["chicago_nursing"]["unvaccinated"]],
-        color=unvaccinated_colour, alpha=0.5, s=1e2
-    )
-    axes["chicago_nursing"].set_title("Chicago,\nnursing students", fontsize=title_fontsize)
+    axes["rosenthal"] = add_chicago_hospital_plot(reactivation_graph, data["chicago_hosp_delivered"], marker_enlargement, 242)
+    marker_enlargement = 20.
+    axes["english_cities"] = add_chicago_hospital_plot(reactivation_graph, data["english_cities"], marker_enlargement, 243)
+    axes["chicago_nursing"] = add_chicago_nursing_plot(reactivation_graph, data["chicago_nursing"], 244)
+    axes["lincoln"] = add_lincoln_plot(reactivation_graph, data["lincoln"], 234)
 
     # Lincoln State School plot
-    axes["lincoln"] = reactivation_graph.add_subplot(234, xlim=(0, x_limit), ylim=(0, y_limit))
-    axes["lincoln"].scatter(
-        data["lincoln"]["durations_years"][:12], lincoln_ages[:12], marker='o', linewidth=0.0, alpha=0.5,
-        color=vaccinated_colour, s=1e2
-    )
-    axes["lincoln"].scatter(
-        data["lincoln"]["durations_years"][12:], lincoln_ages[12:], marker='o', linewidth=0.0, alpha=0.5,
-        color=unvaccinated_colour, s=1e2
-    )
-    axes["lincoln"].set_title("Lincoln State School", fontsize=title_fontsize)
+
 
     # Madanapalle plot
     marker_enlargement = 1e2
@@ -280,18 +302,7 @@ def plot_four_panels(data, x_limit, y_limit, title_fontsize, vaccinated_colour, 
 
     # English cities plot
     marker_enlargement = 20.0
-    axes["english_cities"] = reactivation_graph.add_subplot(221, xlim=(0, x_limit), ylim=(0, y_limit))
-    axes["english_cities"].scatter(
-        data["english_cities"]["times"], [i + english_cities_assumed_age for i in data["english_cities"]["times"]],
-        color=vaccinated_colour, alpha=0.5,
-        s=[marker_enlargement * i for i in data["english_cities"]["vaccinated"]]
-    )
-    axes["english_cities"].scatter(
-        data["english_cities"]["times"], [i + english_cities_assumed_age for i in data["english_cities"]["times"]],
-        color=unvaccinated_colour, alpha=0.5,
-        s=[marker_enlargement * i for i in data["english_cities"]["unvaccinated"]]
-    )
-    axes["english_cities"].set_title("English cities", fontsize=title_fontsize)
+    axes["english_cities"] = add_chicago_hospital_plot(reactivation_graph, data["english_cities"], marker_enlargement, 221)
 
     # Lincoln State School plot
     axes["lincoln"] = reactivation_graph.add_subplot(222, xlim=(0, x_limit), ylim=(0, y_limit))
