@@ -316,7 +316,7 @@ def plot_four_panels(data, x_limit, y_limit, title_fontsize, vaccinated_colour, 
 
     # English cities plot
     axes["english_cities"] = \
-        add_chicago_hospital_plot(
+        add_english_cities_plot(
             reactivation_graph, data["english_cities"], 20.0, 221, x_limit, y_limit, title_fontsize
         )
     axes["lincoln"] = \
