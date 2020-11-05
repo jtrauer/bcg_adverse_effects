@@ -302,57 +302,11 @@ def plot_four_panels(data, x_limit, y_limit, title_fontsize, vaccinated_colour, 
     # English cities plot
     marker_enlargement = 20.0
     axes["english_cities"] = add_chicago_hospital_plot(reactivation_graph, data["english_cities"], marker_enlargement, 221)
-
-    # Lincoln State School plot
-    axes["lincoln"] = reactivation_graph.add_subplot(222, xlim=(0, x_limit), ylim=(0, y_limit))
-    axes["lincoln"].scatter(
-        data["lincoln"]["durations_years"][:12], lincoln_ages[:12], marker='o', linewidth=0.0, alpha=0.5,
-        color=vaccinated_colour, s=1e2
-    )
-    axes["lincoln"].scatter(
-        data["lincoln"]["durations_years"][12:], lincoln_ages[12:], marker='o', linewidth=0.0, alpha=0.5,
-        color=unvaccinated_colour, s=1e2
-    )
-    axes["lincoln"].set_title("Lincoln State School", fontsize=title_fontsize)
-
-    # Madanapalle plot
+    axes["lincoln"] = add_lincoln_plot(reactivation_graph, data["lincoln"], 222)
     marker_enlargement = 1e2
-    axes["madanapalle"] = reactivation_graph.add_subplot(223, title="Madanapalle", xlim=(0, x_limit), ylim=(0, y_limit))
-    for age_group in data["madanapalle"]["average_starting_ages"]:
-        axes["madanapalle"].scatter(
-            data["madanapalle"]["vaccinated_cases"].index.values, data["madanapalle"]["vaccinated_cases"].index.values + age_group,
-            marker="o", s=marker_enlargement * data["madanapalle"]["vaccinated_cases"][age_group],
-            color=vaccinated_colour, alpha=0.5
-        )
-        axes["madanapalle"].scatter(
-            data["madanapalle"]["unvaccinated_cases"].index.values, data["madanapalle"]["unvaccinated_cases"].index.values + age_group,
-            marker="o", s=marker_enlargement * data["madanapalle"]["unvaccinated_cases"][age_group], color=unvaccinated_colour,
-            alpha=0.5
-        )
-    axes["madanapalle"].set_title("Madanapalle", fontsize=title_fontsize)
-
-    # Chengalpattu plot
+    axes["madanapalle"] = add_madanapalle_plot(reactivation_graph, data["madanapalle"], 223, marker_enlargement)
     marker_enlargement = 3.5
-    chengalpattu_age_groups[-1] = 65.  # arbitrary y-position for the last age group on the vertical axis, who are aged 60+
-    axes["chengalpattu"] = reactivation_graph.add_subplot(224, xlim=(0, x_limit), ylim=(0, y_limit))
-    for i_age in range(len(chengalpattu_data)):
-        axes["chengalpattu"].scatter(
-            follow_up_times,
-            [chengalpattu_age_groups[i_age]] * len(follow_up_times),
-            s=[marker_enlargement * i for
-               i in chengalpattu_data.iloc[i_age, :len(follow_up_times)]],
-            color=vaccinated_colour,
-            alpha=0.5
-        )
-        axes["chengalpattu"].scatter(
-            follow_up_times,
-            [chengalpattu_age_groups[i_age]] * len(follow_up_times),
-            s=[marker_enlargement * i for
-               i in chengalpattu_data.iloc[i_age, len(follow_up_times): len(follow_up_times) * 2]],
-            color=unvaccinated_colour,
-            alpha=0.5
-        )
-    axes["chengalpattu"].set_title("Chengalpattu", fontsize=title_fontsize)
+    axes["chengalpattu"] = add_chengalpattu_plot(reactivation_graph, chengalpattu_data, chengalpattu_age_groups, 224, marker_enlargement)
 
     # label x-axis
     for i_ax, axis in enumerate(axes):
