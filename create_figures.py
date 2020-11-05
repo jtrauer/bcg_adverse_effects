@@ -335,17 +335,17 @@ def plot_four_panels(data, x_limit, y_limit, title_fontsize, vaccinated_colour, 
     # label x-axis
     for i_ax, axis in enumerate(axes):
         xlabel_fontsize = 7 if i_ax < 4 else 7
-        axes[axis].set_xlabel("Years from vaccination", fontsize=xlabel_fontsize)
-        axes[axis].set_ylabel("Age at diagnosis", fontsize=7)
         axes[axis].axes.set_xticks(range(0, 30, 10))
         plt.setp(axes[axis].get_xticklabels(), fontsize=7)
         plt.setp(axes[axis].get_yticklabels(), fontsize=7)
 
-    # save multi-panel plot
-    plt.subplots_adjust(
-        wspace=0.45,
-        hspace=0.4
-    )
+        if i_ax > 1:
+            axes[axis].set_xlabel("Years from vaccination", fontsize=xlabel_fontsize)
+        if i_ax % 2 == 0:
+            axes[axis].set_ylabel("Age at diagnosis", fontsize=7)
+
+    plt.tight_layout()
+
     return reactivation_graph
 
 
