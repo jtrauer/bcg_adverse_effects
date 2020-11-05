@@ -138,31 +138,33 @@ chengalpattu_data.columns = [col.replace(".2", "_control") if ".2" in col else c
 plotting
 """
 
-def plot_seven_panels(data):
+plt.style.use("ggplot")
 
-    # plotting parameters
-    plt.style.use("ggplot")
-    x_limit = 21.
-    y_limit = 70.
-    title_fontsize = 9.
-    reactivation_graph = plt.figure()
-    marker_enlargement = 1e2
-    vaccinated_colour = "red"
-    unvaccinated_colour = "blue"
-    axes = {}
 
-    # Saskatchewan plot
-    axes["saskatchewan"] = \
-        reactivation_graph.add_subplot(241, xlim=(0, x_limit), ylim=(0, y_limit))
-    axes["saskatchewan"].scatter(
-        data["saskatchewan"]["times"], data["saskatchewan"]["times"], s=[marker_enlargement * i for i in data["saskatchewan"]["vaccinated"]],
+def add_saskatchewan_plot(reactivation_graph, data, marker_enlargement, panel_number):
+
+    axis = reactivation_graph.add_subplot(panel_number, xlim=(0, x_limit), ylim=(0, y_limit))
+    axis.scatter(
+        data["times"], data["times"],
+        s=[marker_enlargement * i for i in data["vaccinated"]],
         color=vaccinated_colour, alpha=0.5
     )
-    axes["saskatchewan"].scatter(
-        data["saskatchewan"]["times"], data["saskatchewan"]["times"], s=[marker_enlargement * i for i in data["saskatchewan"]["unvaccinated"]],
+    axis.scatter(
+        data["times"], data["times"],
+        s=[marker_enlargement * i for i in data["unvaccinated"]],
         color=unvaccinated_colour, alpha=0.5
     )
-    axes["saskatchewan"].set_title("Saskatchewan\nnative infants", fontsize=title_fontsize)
+    axis.set_title("Saskatchewan\nnative infants", fontsize=title_fontsize)
+    return axis
+
+
+def plot_seven_panels(data, x_limit, y_limit, title_fontsize, vaccinated_colour, unvaccinated_colour):
+
+    reactivation_graph = plt.figure()
+    axes = {}
+    marker_enlargement = 1e2
+
+    axes["saskatchewan"] = add_saskatchewan_plot(reactivation_graph, data["saskatchewan"], marker_enlargement, 241)
 
     # Chicago hospital-delivered infants plot
     axes["rosenthal"] = reactivation_graph.add_subplot(242, xlim=(0, x_limit), ylim=(0, y_limit))
@@ -271,16 +273,9 @@ def plot_seven_panels(data):
     return reactivation_graph
 
 
-def plot_four_panels(data):
+def plot_four_panels(data, x_limit, y_limit, title_fontsize, vaccinated_colour, unvaccinated_colour):
 
-    # plotting parameters
-    plt.style.use("ggplot")
-    x_limit = 21.
-    y_limit = 70.
-    title_fontsize = 9.
     reactivation_graph = plt.figure()
-    vaccinated_colour = "red"
-    unvaccinated_colour = "blue"
     axes = {}
 
     # English cities plot
@@ -366,11 +361,20 @@ def plot_four_panels(data):
     return reactivation_graph
 
 
+x_limit = 21.
+y_limit = 70.
+title_fontsize = 9.
+vaccinated_colour = "red"
+unvaccinated_colour = "blue"
+
+
 file_name = os.path.join(figure_folder, "reactivation_four_panels.jpg")
-reactivation_graph = plot_four_panels(data)
+reactivation_graph = \
+    plot_four_panels(data, x_limit, y_limit, title_fontsize, vaccinated_colour, unvaccinated_colour)
 reactivation_graph.savefig(file_name, dpi=500, bbox_inches="tight")
 
 file_name = os.path.join(figure_folder, "reactivation_seven_panels.jpg")
-reactivation_graph = plot_seven_panels(data)
+reactivation_graph = \
+    plot_seven_panels(data, x_limit, y_limit, title_fontsize, vaccinated_colour, unvaccinated_colour)
 reactivation_graph.savefig(file_name, dpi=500, bbox_inches="tight")
 
