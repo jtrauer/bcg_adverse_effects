@@ -3,8 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="359df79e-5e05-4b05-b4bf-4747f20da3f7" name="Default Changelist" comment="update order of sub-plots again">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bcg_remote_code_3.do" beforeDir="false" afterPath="$PROJECT_DIR$/bcg_remote_code.do" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/create_figures.py" beforeDir="false" afterPath="$PROJECT_DIR$/create_figures.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/age_progression.py" beforeDir="false" afterPath="$PROJECT_DIR$/age_progression.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,14 +30,14 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Python" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PythonContentEntriesConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\jtrauer\bcg_tb_context_review\data" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.create_figures">
+  <component name="RunManager" selected="Python.age_progression">
     <configuration name="age_progression" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="bcg_adverse_effects" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -87,8 +86,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.create_figures" />
         <item itemvalue="Python.age_progression" />
+        <item itemvalue="Python.create_figures" />
       </list>
     </recent_temporary>
   </component>
@@ -188,62 +187,57 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2635" y="222" key="#xdebugger.evaluate/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600644690567" />
-    <state x="61" y="60" width="1158" height="560" key="DiffContextDialog" timestamp="1600605266344">
-      <screen x="0" y="0" width="1280" height="680" />
+    <state x="2012" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1604548627829">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state x="2012" y="92" width="1736" height="856" key="DiffContextDialog/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600388199620" />
+    <state x="2012" y="92" width="1736" height="856" key="DiffContextDialog/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1604548627829" />
     <state x="61" y="60" width="1158" height="560" key="DiffContextDialog/0.0.1280.680@0.0.1280.680" timestamp="1600605266344" />
-    <state width="1899" height="300" key="GridCell.Tab.0.bottom" timestamp="1600656637672">
+    <state width="1899" height="268" key="GridCell.Tab.0.bottom" timestamp="1604548627678">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="300" key="GridCell.Tab.0.bottom/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600656637672" />
+    <state width="1899" height="268" key="GridCell.Tab.0.bottom/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1604548627678" />
     <state width="1259" height="175" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1600431478421" />
-    <state width="1899" height="300" key="GridCell.Tab.0.center" timestamp="1600656637671">
+    <state width="1899" height="268" key="GridCell.Tab.0.center" timestamp="1604548627678">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="300" key="GridCell.Tab.0.center/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600656637671" />
+    <state width="1899" height="268" key="GridCell.Tab.0.center/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1604548627678" />
     <state width="1259" height="175" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1600431478421" />
-    <state width="1899" height="300" key="GridCell.Tab.0.left" timestamp="1600656637671">
+    <state width="1899" height="268" key="GridCell.Tab.0.left" timestamp="1604548627678">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="300" key="GridCell.Tab.0.left/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600656637671" />
+    <state width="1899" height="268" key="GridCell.Tab.0.left/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1604548627678" />
     <state width="1259" height="175" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1600431478421" />
-    <state width="1899" height="300" key="GridCell.Tab.0.right" timestamp="1600656637671">
+    <state width="1899" height="268" key="GridCell.Tab.0.right" timestamp="1604548627678">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="300" key="GridCell.Tab.0.right/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600656637671" />
+    <state width="1899" height="268" key="GridCell.Tab.0.right/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1604548627678" />
     <state width="1259" height="175" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1600431478421" />
-    <state width="1899" height="318" key="GridCell.Tab.1.bottom" timestamp="1600656240071">
+    <state width="1899" height="318" key="GridCell.Tab.1.bottom" timestamp="1600663898856">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="318" key="GridCell.Tab.1.bottom/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600656240071" />
-    <state width="1899" height="318" key="GridCell.Tab.1.center" timestamp="1600656240070">
+    <state width="1899" height="318" key="GridCell.Tab.1.bottom/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600663898856" />
+    <state width="1899" height="318" key="GridCell.Tab.1.center" timestamp="1600663898855">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="318" key="GridCell.Tab.1.center/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600656240070" />
-    <state width="1899" height="318" key="GridCell.Tab.1.left" timestamp="1600656240070">
+    <state width="1899" height="318" key="GridCell.Tab.1.center/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600663898855" />
+    <state width="1899" height="318" key="GridCell.Tab.1.left" timestamp="1600663898855">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="318" key="GridCell.Tab.1.left/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600656240070" />
-    <state width="1899" height="318" key="GridCell.Tab.1.right" timestamp="1600656240071">
+    <state width="1899" height="318" key="GridCell.Tab.1.left/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600663898855" />
+    <state width="1899" height="318" key="GridCell.Tab.1.right" timestamp="1600663898856">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="318" key="GridCell.Tab.1.right/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600656240071" />
+    <state width="1899" height="318" key="GridCell.Tab.1.right/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600663898856" />
+    <state x="2381" y="164" key="SettingsEditor" timestamp="1604534198388">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2381" y="164" key="SettingsEditor/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1604534198388" />
     <state x="2697" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1600393272901">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2697" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1280.680/1920.0.1920.1040@1920.0.1920.1040" timestamp="1600393272901" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/create_figures.py</url>
-          <line>177</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
         <watch expression="bettag_durations_months" />

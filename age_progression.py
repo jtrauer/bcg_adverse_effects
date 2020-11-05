@@ -247,7 +247,7 @@ def plot_age_distribution_single_panel(fontsize):
     single_axis.set_ylim([0., 0.95])
     single_axis.set_xlabel("age", fontsize=fontsize)
     single_axis.set_ylabel("normalised proportion", fontsize=fontsize)
-    single_axis.legend(labels=names)
+    single_axis.legend(labels=[name.capitalize() for name in names])
 
     file_name = os.path.join(figure_folder, "age_distribution_single_panel.jpg")
     age_distribution_graph.savefig(file_name, dpi=500, bbox_inches="tight")
