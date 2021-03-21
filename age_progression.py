@@ -218,7 +218,7 @@ def plot_age_distribution():
         current_axis = age_distribution_graph.add_subplot(
             3, 2, n_name + 1, xlim=[left_point, x_upper_lim], ylim=[bottom_point, bottom_point + 1.0], yticks=[],
             xticks=list(np.linspace(0.0, 60.0, 7)))
-        current_axis.set_title(name.capitalize(), fontsize=9, pad=3)
+        current_axis.set_title(name.title(), fontsize=9, pad=3)
         line_width = 0.5 if age_distribution_known[name] else 0.0
         patch_alpha = 1.0
         cohort = patches.Polygon(data_arrays[name], facecolor=age_patch_colour, edgecolor=age_edge_colour,
@@ -238,7 +238,7 @@ def plot_age_distribution():
 
 def plot_age_distribution_single_panel(fontsize):
     single_axis = age_distribution_graph.add_subplot(111)
-    names = ["native american", "puerto rico", "haiti", "muscogee-russell", "chengalpattu", "madanapalle"]
+    names = ["native american", "puerto Rico", "haiti", "muscogee-Russell", "chengalpattu", "madanapalle"]
     for n_name, name in enumerate(names):
         single_axis.plot(data_arrays[name][:, 0], data_arrays[name][:, 1], linewidth=2)
         for tick in single_axis.xaxis.get_major_ticks():
@@ -252,8 +252,7 @@ def plot_age_distribution_single_panel(fontsize):
     file_name = os.path.join(figure_folder, "age_distribution_single_panel.jpg")
     age_distribution_graph.savefig(file_name, dpi=500, bbox_inches="tight")
 
-
-plot_age_distribution_single_panel(12)
+plot_age_distribution()
 
 # scratch pad for estimating parameters to trapezoidal patch to approximate ages of georgia school study
 # georgia_ages = list(range(6, 18))
